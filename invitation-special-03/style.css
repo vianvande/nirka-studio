@@ -25,6 +25,11 @@
 
 html { scroll-behavior: smooth; }
 
+/* Global Scroll Lock Class - targets .app-container */
+.app-container.app-locked {
+    overflow-y: hidden !important;
+}
+
 body {
     background-color: #0d1117;
     font-family: var(--sans);
@@ -213,6 +218,36 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; }
     transform: translateY(0);
 }
 
+/* Directional reveals */
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-left.delay-1 { transition-delay: 0.1s; }
+.reveal-left.delay-2 { transition-delay: 0.2s; }
+.reveal-left.delay-3 { transition-delay: 0.35s; }
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+.reveal-right.delay-1 { transition-delay: 0.1s; }
+.reveal-right.delay-2 { transition-delay: 0.2s; }
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+.reveal-scale.delay-1 { transition-delay: 0.1s; }
+.reveal-scale.delay-2 { transition-delay: 0.2s; }
+.reveal-scale.delay-3 { transition-delay: 0.3s; }
+
 .reveal-clip {
     opacity: 0;
     clip-path: inset(100% 0 0 0);
@@ -233,6 +268,15 @@ section { position: relative; padding: 80px 32px; }
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 8px;
+}
+
+.fab-music.playing svg {
+    animation: rotate-music 4s linear infinite;
+}
+
+@keyframes rotate-music {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* ===== HERO ===== */
@@ -407,20 +451,24 @@ section { position: relative; padding: 80px 32px; }
     box-shadow: none;
 }
 .couple-photo {
-    width: 170px;
-    height: 230px;
-    border-radius: 85px 85px 20px 20px;   /* arch top, flat bottom */
+    width: 240px;
+    height: 320px;
+    border-radius: 120px 120px 20px 20px;   /* Adjusted for larger width */
     object-fit: cover;
     object-position: top;
-    border: 4px solid white;
-    outline: 3px solid rgba(197,160,89,0.6);
-    margin-bottom: 20px;
+    border: 6px solid white;
+    outline: 3px solid rgba(197,160,89,0.5);
+    margin-bottom: 25px;
     box-shadow:
-        0 16px 48px rgba(0,0,0,0.18),
-        0  4px 12px rgba(0,0,0,0.08);
+        0 20px 60px rgba(0,0,0,0.2),
+        0  6px 15px rgba(0,0,0,0.1);
     display: block;
     margin-left: auto;
     margin-right: auto;
+    transition: transform 0.5s var(--ease-out-expo);
+}
+.couple-photo:hover {
+    transform: scale(1.03);
 }
 .couple-card h3 {
     font-size: 1.6rem;
@@ -486,11 +534,56 @@ section { position: relative; padding: 80px 32px; }
     padding: 28px;
     text-align: left;
     margin-bottom: 16px;
-    border: 1px solid rgba(197,160,89,0.2);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    border: 1px solid rgba(197,160,89,0.25);
+    box-shadow: 0 8px 32px rgba(26,43,72,0.08), 0 2px 8px rgba(197,160,89,0.1);
     display: flex;
     gap: 20px;
     align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s;
+    opacity: 0;
+    transform: translateY(40px);
+}
+.event-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.event-card:nth-child(odd).visible  { animation: slideInLeft 0.8s var(--ease-out-expo) both; }
+.event-card:nth-child(even).visible { animation: slideInRight 0.8s var(--ease-out-expo) both; }
+.event-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+    border-radius: 4px 0 0 4px;
+}
+.event-card::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -30px;
+    width: 120px; height: 200%;
+    background: linear-gradient(135deg, rgba(197,160,89,0.04), rgba(197,160,89,0.01));
+    pointer-events: none;
+}
+.event-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 50px rgba(26,43,72,0.15), 0 4px 16px rgba(197,160,89,0.2);
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
 }
 .event-icon {
     width: 48px;
@@ -522,44 +615,44 @@ section { position: relative; padding: 80px 32px; }
     padding: 0;
 }
 
-/* ===== STORY ===== */
-.story {
-    background:
-        linear-gradient(rgba(247,245,242,0.85), rgba(247,245,242,0.85)),
-        url('assets/bg.png') center/cover no-repeat;
-}
-.story-item {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 40px;
-}
-.story-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-.story-year {
-    font-family: var(--serif);
-    font-size: 2rem;
-    color: var(--gold);
-    opacity: 0.3;
-}
-.story-item h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 6px; }
-.story-item p { color: var(--text-mid); font-size: 0.9rem; line-height: 1.7; }
+/* ===== STORY MOVED TO INDEX.HTML ===== */
+
 
 /* ===== GIFT ===== */
-.gift { background: var(--primary); }
+.gift {
+    background:
+        linear-gradient(rgba(26,43,72,0.95), rgba(26,43,72,0.95)),
+        url('assets/bg.png') center/cover no-repeat fixed;
+}
 .gift-card {
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(197,160,89,0.35);
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 28px;
     text-align: center;
     margin-bottom: 16px;
     backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo), box-shadow 0.4s;
+}
+.gift-card.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+.gift-card:hover {
+    box-shadow: 0 0 40px rgba(197,160,89,0.25);
+    border-color: rgba(197,160,89,0.6);
+    transform: scale(1.01) !important;
+}
+.gift-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(197,160,89,0.08) 0%, transparent 60%);
+    pointer-events: none;
 }
 .gift-bank-logo {
     width: 60px;
@@ -612,8 +705,24 @@ section { position: relative; padding: 80px 32px; }
     background: white;
     border-radius: 28px;
     padding: 36px 28px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
-    border: 1px solid rgba(197,160,89,0.12);
+    box-shadow: 0 16px 60px rgba(0,0,0,0.1);
+    border: 1px solid rgba(197,160,89,0.15);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+}
+.rsvp-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.rsvp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--gold), var(--primary));
 }
 
 /* Attendance Choice */
@@ -806,11 +915,20 @@ section { position: relative; padding: 80px 32px; }
 .wish-card {
     padding: 20px;
     border-radius: 18px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid rgba(197,160,89,0.15);
     margin-bottom: 12px;
-    background: var(--bg-alt);
+    background: linear-gradient(135deg, var(--bg-alt), rgba(250,243,228,0.5));
     position: relative;
+    overflow: hidden;
     animation: wishIn 0.6s var(--ease-out-expo) both;
+}
+.wish-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+    border-radius: 3px 0 0 3px;
 }
 @keyframes wishIn {
     from { opacity: 0; transform: translateY(20px) scale(0.97); }

@@ -1,0 +1,227 @@
+      <!-- ===== PAGE: EDITOR ===== -->
+      <div class="page" id="page-editor">
+        <div class="sec-header">
+          <div class="sec-title" id="ed-title">Editor Undangan: NS-001</div>
+          <div style="display:flex; gap:10px;">
+            <button class="filter-btn" style="background:var(--bg3);" onclick="showPage('page-pesanan')">❌ Batal</button>
+            <button class="add-btn" onclick="saveEditorData()">💾 Simpan Perubahan</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 340px; gap:24px;">
+          <!-- Left: Form Editor -->
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            
+            <!-- 1. Detail Mempelai & Sosmed -->
+            <div class="stat-card" style="background:var(--bg2); border:1px solid var(--border); padding:24px; display:flex; flex-direction:column; gap:20px;">
+              <div class="sec-title" style="margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:10px;">Detail Mempelai & Sosmed</div>
+              
+              <!-- Pria -->
+              <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:12px;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Nama Lengkap Pria</label>
+                    <input type="text" class="form-input" id="ed-pria" placeholder="Nama Mempelai Pria" oninput="updateMockPreview()">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Nama Ayah Pria</label>
+                    <input type="text" class="form-input" id="ed-pria-father" placeholder="Nama Ayah">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nama Ibu Pria</label>
+                    <input type="text" class="form-input" id="ed-pria-mother" placeholder="Nama Ibu">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Instagram Pria (@user)</label>
+                  <input type="text" class="form-input" id="ed-pria-ig" placeholder="@username">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Foto Mempelai Pria</label>
+                  <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="file" id="ed-file-pria" style="display:none;" onchange="handleFileUpload(this, 'ed-preview-pria', 'priaPhoto')">
+                    <button class="filter-btn" onclick="document.getElementById('ed-file-pria').click()">📤 Upload Foto Pria</button>
+                    <div id="ed-preview-pria" style="width:50px; height:50px; background:var(--bg3); border-radius:50%; background-size:cover; background-position:center;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Wanita -->
+              <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:12px;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Nama Lengkap Wanita</label>
+                    <input type="text" class="form-input" id="ed-wanita" placeholder="Nama Mempelai Wanita" oninput="updateMockPreview()">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Nama Ayah Wanita</label>
+                    <input type="text" class="form-input" id="ed-wanita-father" placeholder="Nama Ayah">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nama Ibu Wanita</label>
+                    <input type="text" class="form-input" id="ed-wanita-mother" placeholder="Nama Ibu">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Instagram Wanita (@user)</label>
+                  <input type="text" class="form-input" id="ed-wanita-ig" placeholder="@username">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Foto Mempelai Wanita</label>
+                  <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="file" id="ed-file-wanita" style="display:none;" onchange="handleFileUpload(this, 'ed-preview-wanita', 'wanitaPhoto')">
+                    <button class="filter-btn" onclick="document.getElementById('ed-file-wanita').click()">📤 Upload Foto Wanita</button>
+                    <div id="ed-preview-wanita" style="width:50px; height:50px; background:var(--bg3); border-radius:50%; background-size:cover; background-position:center;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Konten Acara & Media -->
+            <div class="stat-card" style="background:var(--bg2); border:1px solid var(--border); padding:24px; display:flex; flex-direction:column; gap:20px;">
+              <div class="sec-title" style="margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:10px;">Konten Acara & Media</div>
+              
+              <div class="sec-title" style="font-size:13px; margin:10px 0 0; color:var(--gold);">Akad Nikah / Pemberkatan</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Tanggal Akad</label>
+                  <input type="date" class="form-input" id="ed-akad-tgl" onchange="updateMockPreview()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Jam Akad</label>
+                  <input type="text" class="form-input" id="ed-akad-jam" placeholder="08:00 - Selesai">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Lokasi Akad</label>
+                  <input type="text" class="form-input" id="ed-akad-lokasi" placeholder="Masjid / Gereja / Rumah">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Link Maps Akad</label>
+                  <input type="text" class="form-input" id="ed-akad-link" placeholder="https://goo.gl/maps/...">
+                </div>
+              </div>
+
+              <div class="sec-title" style="font-size:13px; margin:10px 0 0; color:var(--gold);">Resepsi Pernikahan</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Tanggal Resepsi</label>
+                  <input type="date" class="form-input" id="ed-resepsi-tgl">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Jam Resepsi</label>
+                  <input type="text" class="form-input" id="ed-resepsi-jam">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Lokasi Resepsi</label>
+                  <input type="text" class="form-input" id="ed-resepsi-lokasi">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Link Maps Resepsi</label>
+                  <input type="text" class="form-input" id="ed-resepsi-link">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Background Music (Drive/Dropbox Link)</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <input type="text" class="form-input" id="ed-music" placeholder="Tempel link musik di sini..." style="flex:1;" oninput="this.value = convertGDriveLink(this.value)">
+                  <button class="filter-btn" onclick="testMusic()">🎧 Tes</button>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Foto Utama (Cover)</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <input type="file" id="ed-file-cover" style="display:none;" onchange="handleFileUpload(this, 'ed-preview-cover', 'cover')">
+                  <button class="filter-btn" onclick="document.getElementById('ed-file-cover').click()">📤 Ganti Cover</button>
+                  <div id="ed-preview-cover" style="width:60px; height:40px; background:var(--bg3); border-radius:6px; background-size:cover; background-position:center; border:1px solid var(--border);"></div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Kutipan (Quote)</label>
+                  <textarea class="form-textarea" id="ed-quote" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Sumber Quote</label>
+                  <input type="text" class="form-input" id="ed-quote-ref">
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Our Love Story -->
+            <div class="stat-card" style="background:var(--bg2); border:1px solid var(--border); padding:24px; display:flex; flex-direction:column; gap:20px;">
+              <div class="sec-title" style="margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:10px;">Our Love Story</div>
+              <div id="ed-story-list" style="display:flex; flex-direction:column; gap:15px;"></div>
+              <button class="filter-btn" onclick="addStoryItem()" style="width:100%;">+ Tambah Cerita</button>
+            </div>
+
+            <!-- 4. Galeri Foto -->
+            <div class="stat-card" style="background:var(--bg2); border:1px solid var(--border); padding:24px; display:flex; flex-direction:column; gap:20px;">
+              <div class="sec-title" style="margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:10px;">Galeri Foto (Maks. 5)</div>
+              <div id="ed-gallery-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap:10px;"></div>
+              <div style="margin-top:10px;">
+                <input type="file" id="ed-file-gallery" style="display:none;" onchange="handleGalleryUpload(this)">
+                <button class="filter-btn" onclick="document.getElementById('ed-file-gallery').click()" style="width:100%;">+ Tambah Foto Galeri</button>
+              </div>
+            </div>
+
+            <!-- 5. Hadiah Digital -->
+            <div class="stat-card" style="background:var(--bg2); border:1px solid var(--border); padding:24px; display:flex; flex-direction:column; gap:20px;">
+              <div class="sec-title" style="margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:10px;">Hadiah Digital & Pengiriman</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Nama Bank/Dompet</label>
+                  <input type="text" class="form-input" id="ed-gift-bank" placeholder="cth: BCA / Dana">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nomor Rekening</label>
+                  <input type="text" class="form-input" id="ed-gift-acc">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nama Pemilik Rekening</label>
+                <input type="text" class="form-input" id="ed-gift-name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Alamat Pengiriman Kado (Fisik)</label>
+                <textarea class="form-textarea" id="ed-gift-address" rows="2" placeholder="Alamat lengkap pengiriman..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Preview Info -->
+          <div style="position:sticky; top:100px;">
+            <div class="stat-card gold" style="padding:24px;">
+              <div class="sec-title" style="margin-bottom:20px; color:var(--gold);">Preview Undangan</div>
+              <div style="background:var(--bg3); aspect-ratio:9/16; border-radius:20px; border:8px solid #000; overflow:hidden; position:relative;">
+                <div id="mock-preview" style="height:100%; position:relative; background:#fdfdfd; display:flex; flex-direction:column; align-items:center; overflow-y:auto; overflow-x:hidden;">
+                  <div id="mock-header" style="width:100%; height:180px; position:relative; background:url('invitation-special-03/assets/cover.png') center/cover; margin-bottom:20px;">
+                    <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent, rgba(26,43,72,0.8));"></div>
+                  </div>
+                  <div id="mock-arch" style="width:100px; height:140px; border-radius:50px 50px 0 0; border:2px solid var(--gold); overflow:hidden; margin-top:-70px; position:relative; z-index:2; background:white; box-shadow:0 10px 20px rgba(0,0,0,0.1);">
+                    <img id="mock-cover-img" src="invitation-special-03/assets/cover.png" style="width:100%; height:100%; object-fit:cover;">
+                  </div>
+                  <div style="padding:15px; text-align:center;">
+                    <p style="font-family:'Great Vibes', cursive; font-size:14px; color:var(--gold); margin-bottom:5px;">Save the Date</p>
+                    <h2 id="mock-names" style="font-family:'Playfair Display', serif; font-size:18px; color:var(--primary); margin:0;">Pria & Wanita</h2>
+                    <p id="mock-date" style="font-size:10px; letter-spacing:2px; color:var(--text-mid); margin-top:5px;">24 . 05 . 2026</p>
+                    <div style="width:40px; height:1px; background:var(--gold); margin:15px auto;"></div>
+                    <p style="font-size:9px; color:var(--text-dim); line-height:1.5;">Kami mengundang Anda untuk menghadiri<br>pernikahan kami.</p>
+                  </div>
+                </div>
+              </div>
+              <button class="add-btn" style="width:100%; margin-top:20px;" onclick="viewLiveInvitation()">👁️ Lihat Live Preview</button>
+            </div>
+          </div>
+        </div>
+      </div>

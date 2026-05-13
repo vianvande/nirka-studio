@@ -60,8 +60,8 @@
                 <path d="M32 16c-4 4-8 12-8 20s4 12 8 12 8-4 8-12-4-16-8-20z" fill="rgba(197,160,89,0.25)"/>
             </svg>
         </div>
-        <p class="reveal delay-2">"Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."</p>
-        <p class="quote-ref reveal delay-3">QS. Ar-Rum : 21</p>
+        <p class="reveal delay-2" id="quote-text">"Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."</p>
+        <p class="quote-ref reveal delay-3" id="quote-ref">QS. Ar-Rum : 21</p>
     </section>
 
     <!-- ===== COUPLE ===== -->
@@ -70,19 +70,19 @@
         <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:32px;">The Bride & Groom</h2>
 
         <div class="couple-card reveal delay-2">
-            <img src="assets/cover.png" class="couple-photo" alt="Julian Putra">
-            <h3>Julian Putra, S.T.</h3>
-            <p>Putra dari Bpk. Bambang Santoso<br>& Ibu Siti Rahayu</p>
-            <a href="#">@julian_putra</a>
+            <img src="assets/cover.png" class="couple-photo" id="pria-photo" alt="Julian Putra">
+            <h3 id="pria-name">Julian Putra, S.T.</h3>
+            <p id="pria-parents">Putra dari Bpk. Bambang Santoso<br>& Ibu Siti Rahayu</p>
+            <a href="#" id="pria-ig">@julian_putra</a>
         </div>
 
         <div class="couple-ampersand reveal delay-3">&amp;</div>
 
         <div class="couple-card reveal delay-4">
-            <img src="assets/cover.png" class="couple-photo" alt="Adeline Putri">
-            <h3>Adeline Putri, S.E.</h3>
-            <p>Putri dari Bpk. Ahmad Fauzi<br>& Ibu Linda Kusuma</p>
-            <a href="#">@adeline_putri</a>
+            <img src="assets/cover.png" class="couple-photo" id="wanita-photo" alt="Adeline Putri">
+            <h3 id="wanita-name">Adeline Putri, S.E.</h3>
+            <p id="wanita-parents">Putri dari Bpk. Ahmad Fauzi<br>& Ibu Linda Kusuma</p>
+            <a href="#" id="wanita-ig">@adeline_putri</a>
         </div>
     </section>
 
@@ -104,8 +104,9 @@
             </div>
             <div class="event-body">
                 <h3>Akad Nikah</h3>
-                <p>Minggu, 24 Mei 2026<br>08:00 – 10:00 WIB<br><strong>Masjid Raya Al-Azhar, Jakarta</strong></p>
-                <button class="btn-map" onclick="window.open('https://maps.google.com')">
+                <p id="akad-datetime">Minggu, 24 Mei 2026<br>08:00 – 10:00 WIB</p>
+                <p><strong id="akad-lokasi">Masjid Raya Al-Azhar, Jakarta</strong></p>
+                <button class="btn-map" id="akad-map-btn" onclick="window.open('https://maps.google.com')">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     Lihat Peta
                 </button>
@@ -118,8 +119,9 @@
             </div>
             <div class="event-body">
                 <h3>Resepsi Pernikahan</h3>
-                <p>Minggu, 24 Mei 2026<br>11:00 – 13:00 WIB<br><strong>The Grand Ballroom, Jakarta</strong></p>
-                <button class="btn-map" onclick="window.open('https://maps.google.com')">
+                <p id="resepsi-datetime">Minggu, 24 Mei 2026<br>11:00 – 13:00 WIB</p>
+                <p><strong id="resepsi-lokasi">The Grand Ballroom, Jakarta</strong></p>
+                <button class="btn-map" id="resepsi-map-btn" onclick="window.open('https://maps.google.com')">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     Lihat Peta
                 </button>
@@ -127,29 +129,146 @@
         </div>
     </section>
 
-    <!-- ===== STORY ===== -->
-    <section class="story" id="story" style="background: var(--bg-alt);">
-        <p class="section-label reveal">Perjalanan Kami</p>
-        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:40px;">Our Love Story</h2>
-
-        <div class="story-item reveal delay-2">
-            <img src="assets/gallery.png" class="story-img" alt="Pertama Bertemu">
-            <div>
-                <p class="story-year">2024</p>
-                <h3>Pertama Bertemu</h3>
-                <p>Awal mula pertemuan kami di sebuah acara seminar kampus yang tidak pernah kami rencanakan. Sebuah kebetulan yang ternyata adalah takdir.</p>
+    <!-- ===== LOVE STORY ===== -->
+    <section class="love-story-section" id="love-story-section">
+        <div class="container" style="max-width: 500px; margin: 0 auto; padding: 60px 20px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <p class="section-label reveal">Perjalanan Kami</p>
+                <h2 class="script reveal delay-1" style="font-size:3rem; margin: 0;">Our Love Story</h2>
             </div>
-        </div>
-
-        <div class="story-item reveal delay-2">
-            <img src="assets/gallery.png" class="story-img" alt="Pertama Kencan">
-            <div>
-                <p class="story-year">2025</p>
-                <h3>Lamaran</h3>
-                <p>Setelah setahun lebih mengenal satu sama lain, Julian memberanikan diri untuk melamar Adeline di tempat yang sama ketika mereka pertama bertemu.</p>
+            
+            <div id="love-story-container" style="display: flex; flex-direction: column; gap: 40px;">
+                <!-- Dynamic Story Items from script.js -->
             </div>
         </div>
     </section>
+
+    <style>
+        .story-section {
+            background: #fdfaf5; /* Warna krem halus */
+            position: relative;
+            overflow: hidden;
+        }
+        .story-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .story-item.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .story-img-wrapper {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .story-img-wrapper img {
+            width: 100%;
+            aspect-ratio: 4/5; /* Gaya potret estetik */
+            object-fit: cover;
+            display: block;
+        }
+        .story-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 28px;
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+        .story-desc {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #666;
+            padding: 0 10px;
+        }
+    </style>
+
+    <!-- ===== GALLERY ===== -->
+    <section class="gallery" id="gallery" style="display:none; padding: 100px 20px;">
+        <p class="section-label reveal">Momen Bahagia</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:40px;">Our Gallery</h2>
+        <div id="gallery-container" class="gallery-grid">
+            <!-- Dynamic Photos -->
+        </div>
+    </section>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
+        <span class="close-lightbox">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <style>
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 1/1;
+        }
+        /* Smart Grid: If 1st child is spanned */
+        .gallery-item.large {
+            grid-column: span 2;
+            aspect-ratio: 16/9;
+        }
+        
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        .story-img-wrapper img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        border-radius: 20px;
+        border: 6px solid #fff;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        display: block;
+      }
+        .lightbox-content {
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            animation: zoom 0.3s ease;
+        }
+        .close-lightbox {
+            position: absolute;
+            top: 20px; right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        @keyframes zoom {
+            from {transform:scale(0.8); opacity:0;}
+            to {transform:scale(1); opacity:1;}
+        }
+    </style>
 
     <!-- ===== GIFT ===== -->
     <section class="gift" id="gift">
@@ -158,21 +277,21 @@
         <p class="reveal delay-2" style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:32px; line-height:1.8;">Doa restu Anda merupakan karunia terbesar. Namun jika ingin berbagi kebahagiaan, Anda dapat mengirimkan melalui:</p>
 
         <div class="gift-card reveal delay-2">
-            <div class="gift-bank-logo">BCA</div>
+            <div class="gift-bank-logo" id="gift-bank-name">BCA</div>
             <p style="font-size:0.75rem; color:rgba(255,255,255,0.4); letter-spacing:2px; text-transform:uppercase;">No. Rekening</p>
-            <p class="gift-acc" id="acc-bca">1234 5678 90</p>
-            <p class="gift-name">a.n Julian Putra</p>
-            <button class="copy-btn" id="copy-bca" onclick="copyText('1234567890', 'copy-bca')">
+            <p class="gift-acc" id="gift-acc-no">1234 5678 90</p>
+            <p class="gift-name" id="gift-acc-name">a.n Julian Putra</p>
+            <button class="copy-btn" id="btn-copy-gift" onclick="copyGiftAcc()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 Salin Rekening
             </button>
         </div>
 
         <div class="gift-card reveal delay-3">
-            <div class="gift-bank-logo">GPN</div>
+            <div class="gift-bank-logo">ALAMAT</div>
             <p style="font-size:0.75rem; color:rgba(255,255,255,0.4); letter-spacing:2px; text-transform:uppercase;">Alamat Pengiriman</p>
-            <p class="gift-acc" style="font-size:1rem; letter-spacing:0.5px;">Jl. Melati No. 12<br>Jakarta Selatan</p>
-            <p class="gift-name">a.n Julian & Adeline</p>
+            <p class="gift-acc" id="gift-address-text" style="font-size:1rem; letter-spacing:0.5px;">Jl. Melati No. 12<br>Jakarta Selatan</p>
+            <p class="gift-name" id="gift-address-name">a.n Julian & Adeline</p>
         </div>
     </section>
 
