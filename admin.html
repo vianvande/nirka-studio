@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Nirka Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0F1117;
+    --bg2:       #161820;
+    --bg3:       #1E2030;
+    --border:    rgba(255,255,255,0.07);
+    --border-act:rgba(255,255,255,0.15);
+    --text:      #E8E9F0;
+    --text-dim:  #6B7280;
+    --text-mid:  #9BA3AF;
+    --gold:      #F0B429;
+    --gold-d:    #C49219;
+    --green:     #34D399;
+    --green-d:   rgba(52,211,153,0.12);
+    --blue:      #60A5FA;
+    --blue-d:    rgba(96,165,250,0.12);
+    --orange:    #FB923C;
+    --orange-d:  rgba(251,146,60,0.12);
+    --red:       #F87171;
+    --red-d:     rgba(248,113,113,0.12);
+    --purple:    #A78BFA;
+    --purple-d:  rgba(167,139,250,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== LOGIN SCREEN ===== */
+  #login-screen {
+    position: fixed; inset:0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+
+  .login-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 48px 40px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+  .login-box::before {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .login-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .login-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+
+  .login-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+
+  .login-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+    letter-spacing: 2px;
+  }
+  .login-input:focus { border-color: var(--gold); }
+
+  .login-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--gold);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--bg);
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s;
+    margin-top: 8px;
+  }
+  .login-btn:hover { background: #F5C842; }
+
+  .login-err {
+    font-size: 11px;
+    color: var(--red);
+    margin-top: 12px;
+    display: none;
+    letter-spacing: 1px;
+  }
+
+  .login-hint {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ===== APP LAYOUT ===== */
+  #app { display: none; min-height: 100vh; }
+  #app.visible { display: flex; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top:0; left:0; bottom:0;
+    z-index: 50;
+    transition: transform 0.3s;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .logo-tag {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .nav-section {
+    padding: 16px 12px 8px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    margin: 2px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    font-weight: 400;
+  }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: rgba(240,180,41,0.1); color: var(--gold); }
+  .nav-item .ni { font-size: 16px; width: 20px; text-align: center; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--gold);
+    color: var(--bg);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 16px 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .logout-btn:hover { color: var(--red); background: var(--red-d); }
+
+  /* ===== MAIN CONTENT ===== */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+
+  .topbar-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-d), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--bg);
+    cursor: pointer;
+  }
+
+  /* ===== PAGES ===== */
+  .page { display: none; padding: 28px; animation: pgIn 0.3s ease; }
+  .page.active { display: block; }
+  @keyframes pgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== STATS CARDS ===== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .stat-card:hover { border-color: var(--border-act); }
+  .stat-card::before {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+  }
+  .stat-card.gold::before   { background: var(--gold); }
+  .stat-card.green::before  { background: var(--green); }
+  .stat-card.blue::before   { background: var(--blue); }
+  .stat-card.orange::before { background: var(--orange); }
+  .stat-card.purple::before { background: var(--purple); }
+
+  .stat-icon { font-size: 22px; margin-bottom: 12px; display: block; }
+
+  .stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .stat-delta {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .stat-delta.up   { background: var(--green-d); color: var(--green); }
+  .stat-delta.warn { background: var(--orange-d); color: var(--orange); }
+
+  /* ===== SECTION HEADER ===== */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .sec-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .sec-action {
+    font-size: 11px;
+    color: var(--gold);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    background: none;
+    border: none;
+    transition: opacity 0.2s;
+  }
+  .sec-action:hover { opacity: 0.7; }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .table-toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 100%;
+  }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  .filter-btn {
+    padding: 8px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); }
+
+  .add-btn {
+    padding: 8px 16px;
+    background: var(--gold);
+    border: none;
+    color: var(--bg);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: #F5C842; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+  }
+
+  td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .td-name { font-weight: 500; color: var(--text); }
+  .td-id { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); }
+  .td-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-mid); }
+
+  /* Status badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+  .badge-new     { background: var(--blue-d);   color: var(--blue); }
+  .badge-proses  { background: var(--orange-d); color: var(--orange); }
+  .badge-revisi  { background: var(--purple-d); color: var(--purple); }
+  .badge-selesai { background: var(--green-d);  color: var(--green); }
+  .badge-lunas   { background: var(--green-d);  color: var(--green); }
+  .badge-dp      { background: var(--orange-d); color: var(--orange); }
+  .badge-belum   { background: var(--red-d);    color: var(--red); }
+
+  /* Template badge */
+  .tmpl-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text-mid);
+    font-family: 'DM Mono', monospace;
+  }
+  .tmpl-tag.gold-t    { border-color: rgba(240,180,41,0.3); color: var(--gold); }
+  .tmpl-tag.java-t    { border-color: rgba(192,123,62,0.3); color: #D4A06A; }
+  .tmpl-tag.floral-t  { border-color: rgba(196,113,138,0.3); color: #E8A0B4; }
+  .tmpl-tag.minimal-t { border-color: rgba(180,180,180,0.3); color: #B0B0B0; }
+  .tmpl-tag.bold-t    { border-color: rgba(74,144,217,0.3); color: var(--blue); }
+
+  /* Actions */
+  .row-actions { display: flex; gap: 6px; }
+
+  .act-btn {
+    padding: 5px 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .act-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .act-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+  /* ===== MODAL PESANAN ===== */
+  .modal-overlay {
+    position: fixed; inset:0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border-act);
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.96);
+    transition: transform 0.25s;
+    position: relative;
+  }
+  .modal-overlay.open .modal { transform: scale(1); }
+
+  .modal-head {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top:0;
+    background: var(--bg2);
+    z-index:1;
+  }
+
+  .modal-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .modal-close {
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { color: var(--red); border-color: var(--red); }
+
+  .modal-body { padding: 24px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row.full { grid-template-columns: 1fr; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-select option { background: var(--bg3); }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  .modal-foot {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .btn-cancel {
+    padding: 10px 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    font-size: 11px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover { border-color: var(--border-act); color: var(--text); }
+
+  .btn-save {
+    padding: 10px 24px;
+    background: var(--gold);
+    border: none;
+    color: var(--bg);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .btn-save:hover { background: #F5C842; }
+
+  /* ===== DETAIL PANEL ===== */
+  .detail-panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  .detail-item {}
+  .detail-item-lbl {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 5px;
+  }
+  .detail-item-val {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline { margin-top: 8px; }
+
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+
+  .tl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .tl-dot.done  { background: var(--green); }
+  .tl-dot.now   { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+  .tl-dot.todo  { background: var(--bg3); border: 1px solid var(--border); }
+
+  .tl-line-wrap { position:relative; }
+  .tl-line {
+    position: absolute;
+    left: 3px; top: 13px; bottom: -12px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .tl-label {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+  .tl-label.done-txt { color: var(--text-dim); text-decoration: line-through; }
+  .tl-label.now-txt  { color: var(--gold); font-weight: 500; }
+
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-dim);
+  }
+  .empty-state .empty-icon { font-size: 36px; margin-bottom: 12px; display: block; opacity: 0.4; }
+  .empty-state p { font-size: 13px; letter-spacing: 1px; }
+
+  /* ===== REVENUE MINI CHART ===== */
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .chart-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .chart-title {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 80px;
+  }
+
+  .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+
+  .bar {
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+    transition: opacity 0.2s;
+    min-height: 4px;
+  }
+  .bar:hover { opacity: 0.75; }
+
+  .bar-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .donut-legend { flex:1; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--text-mid);
+  }
+  .legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .legend-pct {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--bg2);
+    border: 1px solid var(--border-act);
+    padding: 12px 20px;
+    font-size: 12px;
+    color: var(--text);
+    z-index: 500;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast.show { opacity:1; transform: translateY(0); }
+  .toast .toast-icon { font-size: 16px; flex-shrink:0; }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:768px){
+    .sidebar { transform: translateX(-220px); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .form-row { grid-template-columns:1fr; }
+    .chart-row { grid-template-columns:1fr; }
+    .stats-grid { grid-template-columns:1fr 1fr; }
+    .table-wrap { overflow-x: auto; }
+    .mobile-menu-btn { display:flex !important; }
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    margin-right: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Nirka Studio</div>
+    <div class="login-sub">Admin Dashboard</div>
+    <label class="login-label">Username</label>
+    <input type="text" class="login-input" id="l-user" placeholder="admin" autocomplete="off">
+    <label class="login-label">Password</label>
+    <input type="password" class="login-input" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Masuk →</button>
+    <div class="login-err" id="login-err">⚠ Username atau password salah</div>
+    <div class="login-hint">demo: admin / nirka2025</div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-brand">Nirka Studio</div>
+      <div class="logo-tag">Admin Panel</div>
+    </div>
+
+    <div class="nav-section">Menu</div>
+    <div class="nav-item active" onclick="goPage('dashboard',this)">
+      <span class="ni">📊</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="goPage('pesanan',this)">
+      <span class="ni">📋</span> Pesanan
+      <span class="nav-badge" id="badge-baru">0</span>
+    </div>
+    <div class="nav-item" onclick="goPage('klien',this)">
+      <span class="ni">👥</span> Klien
+    </div>
+    <div class="nav-item" onclick="goPage('template',this)">
+      <span class="ni">🎨</span> Template
+    </div>
+
+    <div class="nav-section">Keuangan</div>
+    <div class="nav-item" onclick="goPage('keuangan',this)">
+      <span class="ni">💰</span> Pendapatan
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="logout-btn" onclick="doLogout()">
+        <span>🚪</span> Keluar
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+        <div class="avatar" title="Admin">A</div>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: DASHBOARD ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card gold">
+          <span class="stat-icon">📋</span>
+          <div class="stat-val" id="s-total">0</div>
+          <div class="stat-lbl">Total Pesanan</div>
+          <div class="stat-delta up" id="s-delta-total">+0</div>
+        </div>
+        <div class="stat-card green">
+          <span class="stat-icon">✅</span>
+          <div class="stat-val" id="s-selesai">0</div>
+          <div class="stat-lbl">Selesai</div>
+        </div>
+        <div class="stat-card orange">
+          <span class="stat-icon">⚙️</span>
+          <div class="stat-val" id="s-proses">0</div>
+          <div class="stat-lbl">Dalam Proses</div>
+          <div class="stat-delta warn" id="s-delta-proses"></div>
+        </div>
+        <div class="stat-card blue">
+          <span class="stat-icon">🆕</span>
+          <div class="stat-val" id="s-baru">0</div>
+          <div class="stat-lbl">Pesanan Baru</div>
+        </div>
+        <div class="stat-card purple">
+          <span class="stat-icon">💰</span>
+          <div class="stat-val" id="s-revenue">0</div>
+          <div class="stat-lbl">Pendapatan (rb)</div>
+          <div class="stat-delta up" id="s-delta-rev">+0</div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-row">
+        <div class="chart-card">
+          <div class="chart-title">Pesanan 6 Bulan Terakhir</div>
+          <div class="bar-chart" id="bar-chart"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Template Terpopuler</div>
+          <div class="donut-wrap">
+            <svg width="80" height="80" viewBox="0 0 80 80" id="donut-svg"></svg>
+            <div class="donut-legend" id="donut-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent orders -->
+      <div class="sec-header">
+        <div class="sec-title">Pesanan Terbaru</div>
+        <button class="sec-action" onclick="goPage('pesanan', document.querySelectorAll('.nav-item')[1])">Lihat Semua →</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama Pasangan</th>
+              <th>Template</th>
+              <th>Tanggal Pesan</th>
+              <th>Status</th>
+              <th>Pembayaran</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: PESANAN ===== -->
+    <div class="page" id="page-pesanan">
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span style="color:var(--text-dim)">🔍</span>
+            <input class="search-input" placeholder="Cari nama, ID, atau template..." id="search-pesanan" oninput="filterPesanan()">
+          </div>
+          <button class="filter-btn active" onclick="setFilter('semua',this)" id="f-semua">Semua</button>
+          <button class="filter-btn" onclick="setFilter('Baru',this)" id="f-baru">Baru</button>
+          <button class="filter-btn" onclick="setFilter('Proses',this)" id="f-proses">Proses</button>
+          <button class="filter-btn" onclick="setFilter('Revisi',this)" id="f-revisi">Revisi</button>
+          <button class="filter-btn" onclick="setFilter('Selesai',this)" id="f-selesai">Selesai</button>
+          <button class="add-btn" onclick="openModal()">+ Tambah</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama Pasangan</th>
+              <th>Template</th>
+              <th>Paket</th>
+              <th>Tgl Pesan</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th>Bayar</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="pesanan-tbody"></tbody>
+        </table>
+        <div id="empty-pesanan" class="empty-state" style="display:none;">
+          <span class="empty-icon">📭</span>
+          <p>Tidak ada pesanan ditemukan</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: KLIEN ===== -->
+    <div class="page" id="page-klien">
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span style="color:var(--text-dim)">🔍</span>
+            <input class="search-input" placeholder="Cari nama atau nomor HP..." id="search-klien" oninput="filterKlien()">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nama Pasangan</th>
+              <th>No. WhatsApp</th>
+              <th>Template</th>
+              <th>Total Pesanan</th>
+              <th>Tgl Nikah</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="klien-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: TEMPLATE ===== -->
+    <div class="page" id="page-template">
+      <div class="stats-grid" id="template-stats"></div>
+    </div>
+
+    <!-- ===== PAGE: KEUANGAN ===== -->
+    <div class="page" id="page-keuangan">
+      <div class="stats-grid">
+        <div class="stat-card green">
+          <span class="stat-icon">💵</span>
+          <div class="stat-val" id="k-total">Rp0</div>
+          <div class="stat-lbl">Total Pendapatan</div>
+        </div>
+        <div class="stat-card gold">
+          <span class="stat-icon">✅</span>
+          <div class="stat-val" id="k-lunas">Rp0</div>
+          <div class="stat-lbl">Sudah Lunas</div>
+        </div>
+        <div class="stat-card orange">
+          <span class="stat-icon">⏳</span>
+          <div class="stat-val" id="k-dp">Rp0</div>
+          <div class="stat-lbl">Baru DP</div>
+        </div>
+        <div class="stat-card red">
+          <span class="stat-icon">❗</span>
+          <div class="stat-val" id="k-belum">Rp0</div>
+          <div class="stat-lbl">Belum Bayar</div>
+        </div>
+      </div>
+      <div class="sec-header" style="margin-top:8px;">
+        <div class="sec-title">Rincian Pembayaran</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama Pasangan</th>
+              <th>Paket</th>
+              <th>Nominal</th>
+              <th>Status Bayar</th>
+              <th>Tgl Bayar</th>
+            </tr>
+          </thead>
+          <tbody id="keuangan-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- end .main -->
+</div><!-- end #app -->
+
+<!-- ===== MODAL TAMBAH/EDIT PESANAN ===== -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Tambah Pesanan Baru</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama Mempelai Pria</label>
+          <input type="text" class="form-input" id="f-pria" placeholder="cth: Arjuna">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Mempelai Wanita</label>
+          <input type="text" class="form-input" id="f-wanita" placeholder="cth: Salsabila">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">No. WhatsApp</label>
+          <input type="text" class="form-input" id="f-wa" placeholder="08xxxxxxxxxx">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal Pernikahan</label>
+          <input type="date" class="form-input" id="f-tglnikah">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Template</label>
+          <select class="form-select" id="f-template">
+            <option value="Elegant Gold">Elegant Gold</option>
+            <option value="Nusantara Heritage">Nusantara Heritage</option>
+            <option value="Floral Romance">Floral Romance</option>
+            <option value="Minimalist Modern">Minimalist Modern</option>
+            <option value="Bold Contemporary">Bold Contemporary</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Paket</label>
+          <select class="form-select" id="f-paket">
+            <option value="Starter">Starter (Rp149rb)</option>
+            <option value="Premium">Premium (Rp249rb)</option>
+            <option value="VIP">VIP (Rp399rb)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Status Pengerjaan</label>
+          <select class="form-select" id="f-status">
+            <option value="Baru">Baru</option>
+            <option value="Proses">Proses</option>
+            <option value="Revisi">Revisi</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status Pembayaran</label>
+          <select class="form-select" id="f-bayar">
+            <option value="Belum">Belum Bayar</option>
+            <option value="DP">Sudah DP</option>
+            <option value="Lunas">Lunas</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label">Catatan</label>
+          <textarea class="form-textarea" id="f-catatan" placeholder="Catatan tambahan, permintaan khusus, dll..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="savePesanan()">Simpan Pesanan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✓</span>
+  <span id="toast-msg">Berhasil disimpan</span>
+</div>
+
+<script>
+// ===== DATA =====
+const PAKET_HARGA = { Starter: 149000, Premium: 249000, VIP: 399000 };
+const TMPL_CLASS  = {
+  'Elegant Gold': 'gold-t',
+  'Nusantara Heritage': 'java-t',
+  'Floral Romance': 'floral-t',
+  'Minimalist Modern': 'minimal-t',
+  'Bold Contemporary': 'bold-t'
+};
+
+let pesanan = JSON.parse(localStorage.getItem('ns_pesanan') || '[]');
+let editId = null;
+let filterStatus = 'semua';
+
+// Seed demo data kalau kosong
+if (pesanan.length === 0) {
+  const now = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  const ago = n => { let d=new Date(now); d.setDate(d.getDate()-n); return fmt(d); };
+  const fwd = n => { let d=new Date(now); d.setDate(d.getDate()+n); return fmt(d); };
+
+  pesanan = [
+    { id:'NS-001', pria:'Arjuna', wanita:'Salsabila', wa:'081234567890', tglnikah:'2025-06-14', template:'Elegant Gold',         paket:'Premium', status:'Selesai', bayar:'Lunas',  tglpesan:ago(10), deadline:ago(8),  catatan:'Prioritas' },
+    { id:'NS-002', pria:'Bima',   wanita:'Sekar',     wa:'081234567891', tglnikah:'2025-09-20', template:'Nusantara Heritage',   paket:'VIP',     status:'Selesai', bayar:'Lunas',  tglpesan:ago(7),  deadline:ago(5),  catatan:'' },
+    { id:'NS-003', pria:'Rizal',  wanita:'Dinda',     wa:'081234567892', tglnikah:'2025-06-15', template:'Floral Romance',       paket:'Premium', status:'Proses',  bayar:'DP',     tglpesan:ago(4),  deadline:fwd(2),  catatan:'Minta warna pink lebih soft' },
+    { id:'NS-004', pria:'Rafi',   wanita:'Aulia',     wa:'081234567893', tglnikah:'2025-10-10', template:'Minimalist Modern',    paket:'Starter', status:'Revisi',  bayar:'Lunas',  tglpesan:ago(3),  deadline:fwd(1),  catatan:'Revisi jam akad' },
+    { id:'NS-005', pria:'Bagas',  wanita:'Tiara',     wa:'081234567894', tglnikah:'2025-11-22', template:'Bold Contemporary',    paket:'VIP',     status:'Proses',  bayar:'DP',     tglpesan:ago(2),  deadline:fwd(3),  catatan:'VIP 6 jam' },
+    { id:'NS-006', pria:'Fahri',  wanita:'Nadira',    wa:'081234567895', tglnikah:'2025-08-05', template:'Elegant Gold',         paket:'Premium', status:'Baru',    bayar:'Belum',  tglpesan:ago(1),  deadline:fwd(2),  catatan:'' },
+    { id:'NS-007', pria:'Dimas',  wanita:'Putri',     wa:'081234567896', tglnikah:'2025-12-12', template:'Floral Romance',       paket:'Starter', status:'Baru',    bayar:'Belum',  tglpesan:ago(0),  deadline:fwd(2),  catatan:'Budget terbatas' },
+  ];
+  save();
+}
+
+function save() {
+  localStorage.setItem('ns_pesanan', JSON.stringify(pesanan));
+}
+
+function genId() {
+  const n = pesanan.length + 1;
+  return 'NS-' + String(n).padStart(3,'0');
+}
+
+// ===== LOGIN =====
+function doLogin() {
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value;
+  if (u === 'admin' && p === 'nirka2025') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    initApp();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('l-pass').value = '';
+}
+
+// ===== INIT =====
+function initApp() {
+  updateTopbarDate();
+  setInterval(updateTopbarDate, 60000);
+  renderAll();
+}
+
+function updateTopbarDate() {
+  const d = new Date();
+  const opts = { weekday:'short', day:'numeric', month:'short', year:'numeric' };
+  document.getElementById('topbar-date').textContent = d.toLocaleDateString('id-ID', opts);
+}
+
+function renderAll() {
+  renderStats();
+  renderBarChart();
+  renderDonut();
+  renderRecentTable();
+  renderPesananTable();
+  renderKlienTable();
+  renderTemplateStats();
+  renderKeuangan();
+  updateBadge();
+}
+
+// ===== STATS =====
+function renderStats() {
+  const total    = pesanan.length;
+  const selesai  = pesanan.filter(p=>p.status==='Selesai').length;
+  const proses   = pesanan.filter(p=>p.status==='Proses'||p.status==='Revisi').length;
+  const baru     = pesanan.filter(p=>p.status==='Baru').length;
+  const revenue  = pesanan.filter(p=>p.bayar==='Lunas').reduce((s,p)=>s+PAKET_HARGA[p.paket],0);
+
+  document.getElementById('s-total').textContent   = total;
+  document.getElementById('s-selesai').textContent  = selesai;
+  document.getElementById('s-proses').textContent   = proses;
+  document.getElementById('s-baru').textContent     = baru;
+  document.getElementById('s-revenue').textContent  = (revenue/1000).toFixed(0);
+  document.getElementById('s-delta-total').textContent = `+${total}`;
+  document.getElementById('s-delta-proses').textContent = proses > 0 ? `${proses} aktif` : '';
+  document.getElementById('s-delta-rev').textContent = `+${(revenue/1000).toFixed(0)}rb`;
+}
+
+function updateBadge() {
+  const baru = pesanan.filter(p=>p.status==='Baru').length;
+  document.getElementById('badge-baru').textContent = baru;
+  document.getElementById('badge-baru').style.display = baru > 0 ? '' : 'none';
+}
+
+// ===== BAR CHART =====
+function renderBarChart() {
+  const months = [];
+  const counts = [];
+  for (let i=5; i>=0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth()-i);
+    const ym = d.toISOString().slice(0,7);
+    const lbl = d.toLocaleDateString('id-ID',{month:'short'});
+    const cnt = pesanan.filter(p=>p.tglpesan && p.tglpesan.startsWith(ym)).length;
+    months.push(lbl); counts.push(cnt);
+  }
+  const max = Math.max(...counts, 1);
+  const el = document.getElementById('bar-chart');
+  el.innerHTML = counts.map((c,i)=>`
+    <div class="bar-col">
+      <div class="bar" style="height:${Math.max((c/max)*72,4)}px;background:${c>0?'var(--gold)':'var(--bg3)'};" title="${c} pesanan"></div>
+      <div class="bar-lbl">${months[i]}</div>
+    </div>`).join('');
+}
+
+// ===== DONUT =====
+function renderDonut() {
+  const tmplCount = {};
+  pesanan.forEach(p => { tmplCount[p.template] = (tmplCount[p.template]||0)+1; });
+  const total = pesanan.length || 1;
+  const colors = ['var(--gold)','#D4A06A','#E8A0B4','#B0B0B0','var(--blue)'];
+  const tmplNames = Object.keys(tmplCount);
+
+  // Simple arc SVG
+  let offset = 0;
+  const r = 28, cx = 40, cy = 40, stroke = 14;
+  const circ = 2 * Math.PI * r;
+  let arcs = '';
+  tmplNames.forEach((t,i) => {
+    const pct = tmplCount[t] / total;
+    const dash = pct * circ;
+    arcs += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[i%colors.length]}" stroke-width="${stroke}" stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${-offset * circ}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    offset += pct;
+  });
+  document.getElementById('donut-svg').innerHTML = arcs + `<circle cx="${cx}" cy="${cy}" r="${r-stroke/2-2}" fill="var(--bg2)"/>`;
+
+  const lg = document.getElementById('donut-legend');
+  lg.innerHTML = tmplNames.slice(0,5).map((t,i) => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${colors[i%colors.length]}"></div>
+      <span style="font-size:11px;">${t.split(' ')[0]}</span>
+      <span class="legend-pct">${Math.round(tmplCount[t]/total*100)}%</span>
+    </div>`).join('');
+}
+
+// ===== TABLES =====
+function badgeHtml(status, type='status') {
+  if (type==='status') {
+    const map = { Baru:'badge-new', Proses:'badge-proses', Revisi:'badge-revisi', Selesai:'badge-selesai' };
+    return `<span class="badge ${map[status]||'badge-new'}">${status}</span>`;
+  } else {
+    const map = { Lunas:'badge-lunas', DP:'badge-dp', Belum:'badge-belum' };
+    return `<span class="badge ${map[status]||'badge-belum'}">${status==='Lunas'?'Lunas':status==='DP'?'DP':'Belum'}</span>`;
+  }
+}
+
+function tmplHtml(t) {
+  return `<span class="tmpl-tag ${TMPL_CLASS[t]||''}">${t}</span>`;
+}
+
+function renderRecentTable() {
+  const recent = [...pesanan].sort((a,b)=>b.tglpesan.localeCompare(a.tglpesan)).slice(0,5);
+  document.getElementById('recent-tbody').innerHTML = recent.map(p=>`
+    <tr>
+      <td class="td-id">${p.id}</td>
+      <td class="td-name">${p.pria} & ${p.wanita}</td>
+      <td>${tmplHtml(p.template)}</td>
+      <td class="td-date">${p.tglpesan}</td>
+      <td>${badgeHtml(p.status)}</td>
+      <td>${badgeHtml(p.bayar,'bayar')}</td>
+      <td><button class="act-btn" style="color:var(--gold);border-color:rgba(240,180,41,0.3);" onclick="openInvoice('${p.id}')" title="Buat Invoice">🧾 Invoice</button></td>
+    </tr>`).join('');
+}
+
+function renderPesananTable() {
+  const q = (document.getElementById('search-pesanan')?.value||'').toLowerCase();
+  let data = pesanan.filter(p => {
+    const match = (`${p.pria} ${p.wanita} ${p.id} ${p.template}`).toLowerCase().includes(q);
+    const filt = filterStatus==='semua' || p.status===filterStatus;
+    return match && filt;
+  }).sort((a,b)=>b.tglpesan.localeCompare(a.tglpesan));
+
+  const tbody = document.getElementById('pesanan-tbody');
+  const empty = document.getElementById('empty-pesanan');
+
+  if (data.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = data.map(p=>`
+    <tr>
+      <td class="td-id">${p.id}</td>
+      <td class="td-name">${p.pria} & ${p.wanita}</td>
+      <td>${tmplHtml(p.template)}</td>
+      <td><span style="font-size:12px;color:var(--text-mid);">${p.paket}</span></td>
+      <td class="td-date">${p.tglpesan}</td>
+      <td class="td-date" style="${isDeadlineSoon(p.deadline)?'color:var(--orange)':''}">${p.deadline}</td>
+      <td>${badgeHtml(p.status)}</td>
+      <td>${badgeHtml(p.bayar,'bayar')}</td>
+      <td>
+        <div class="row-actions">
+          <button class="act-btn" onclick="openEditModal('${p.id}')">✏️</button>
+          <button class="act-btn" onclick="quickStatus('${p.id}')">▶</button>
+          <button class="act-btn" style="color:var(--gold);border-color:rgba(240,180,41,0.3);" onclick="openInvoice('${p.id}')" title="Buat Invoice">🧾</button>
+          <button class="act-btn danger" onclick="deletePesanan('${p.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function isDeadlineSoon(d) {
+  if (!d) return false;
+  const diff = (new Date(d) - new Date()) / 86400000;
+  return diff >= 0 && diff <= 2;
+}
+
+function renderKlienTable() {
+  const q = (document.getElementById('search-klien')?.value||'').toLowerCase();
+  const data = pesanan.filter(p => (`${p.pria} ${p.wanita} ${p.wa}`).toLowerCase().includes(q));
+  document.getElementById('klien-tbody').innerHTML = data.map(p=>`
+    <tr>
+      <td class="td-name">${p.pria} & ${p.wanita}</td>
+      <td>
+        <a href="https://wa.me/${p.wa.replace(/\D/g,'').replace(/^0/,'62')}"
+           target="_blank"
+           style="color:var(--green);text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;">
+          💬 ${p.wa}
+        </a>
+      </td>
+      <td>${tmplHtml(p.template)}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text-dim);">1 pesanan</span></td>
+      <td class="td-date">${p.tglnikah||'-'}</td>
+      <td>
+        <div class="row-actions">
+          <a href="https://wa.me/${p.wa.replace(/\D/g,'').replace(/^0/,'62')}?text=Halo%20kak%20${p.pria}%2C%20undangan%20sedang%20kami%20proses%20ya!" target="_blank" class="act-btn">💬 WA</a>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderTemplateStats() {
+  const tmplData = [
+    { name:'Elegant Gold',       key:'Elegant Gold',       icon:'🥇', color:'gold' },
+    { name:'Nusantara Heritage', key:'Nusantara Heritage', icon:'🏛️', color:'orange' },
+    { name:'Floral Romance',     key:'Floral Romance',     icon:'🌸', color:'purple' },
+    { name:'Minimalist Modern',  key:'Minimalist Modern',  icon:'⬛', color:'blue' },
+    { name:'Bold Contemporary',  key:'Bold Contemporary',  icon:'🔵', color:'blue' },
+  ];
+  document.getElementById('template-stats').innerHTML = tmplData.map(t=>{
+    const cnt = pesanan.filter(p=>p.template===t.key).length;
+    const rev = pesanan.filter(p=>p.template===t.key&&p.bayar==='Lunas').reduce((s,p)=>s+PAKET_HARGA[p.paket],0);
+    return `
+      <div class="stat-card ${t.color}">
+        <span class="stat-icon">${t.icon}</span>
+        <div class="stat-val">${cnt}</div>
+        <div class="stat-lbl">${t.name}</div>
+        <div class="stat-delta up" style="font-size:9px;">Rp${(rev/1000).toFixed(0)}rb</div>
+      </div>`;
+  }).join('');
+}
+
+function renderKeuangan() {
+  const total  = pesanan.reduce((s,p)=>s+PAKET_HARGA[p.paket],0);
+  const lunas  = pesanan.filter(p=>p.bayar==='Lunas').reduce((s,p)=>s+PAKET_HARGA[p.paket],0);
+  const dp     = pesanan.filter(p=>p.bayar==='DP').reduce((s,p)=>s+PAKET_HARGA[p.paket]*0.5,0);
+  const belum  = pesanan.filter(p=>p.bayar==='Belum').reduce((s,p)=>s+PAKET_HARGA[p.paket],0);
+
+  const fmt = n => 'Rp'+(n/1000).toFixed(0)+'rb';
+  document.getElementById('k-total').textContent = fmt(total);
+  document.getElementById('k-lunas').textContent  = fmt(lunas);
+  document.getElementById('k-dp').textContent    = fmt(dp);
+  document.getElementById('k-belum').textContent  = fmt(belum);
+
+  document.getElementById('keuangan-tbody').innerHTML = [...pesanan]
+    .sort((a,b)=>b.tglpesan.localeCompare(a.tglpesan))
+    .map(p=>`
+      <tr>
+        <td class="td-id">${p.id}</td>
+        <td class="td-name">${p.pria} & ${p.wanita}</td>
+        <td style="font-size:12px;color:var(--text-mid);">${p.paket}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:13px;color:var(--text);">Rp${(PAKET_HARGA[p.paket]/1000).toFixed(0)}rb</td>
+        <td>${badgeHtml(p.bayar,'bayar')}</td>
+        <td class="td-date">${p.tglpesan}</td>
+      </tr>`).join('');
+}
+
+// ===== NAVIGATION =====
+function goPage(name, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles = { dashboard:'Dashboard', pesanan:'Pesanan', klien:'Data Klien', template:'Template', keuangan:'Pendapatan' };
+  document.getElementById('page-title').textContent = titles[name]||name;
+
+  // Re-render on switch
+  if(name==='pesanan') renderPesananTable();
+  if(name==='klien') renderKlienTable();
+  if(name==='template') renderTemplateStats();
+  if(name==='keuangan') renderKeuangan();
+  if(name==='dashboard') { renderStats(); renderBarChart(); renderDonut(); renderRecentTable(); }
+
+  // Close sidebar on mobile
+  if(window.innerWidth<=768) document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ===== FILTER =====
+function setFilter(val, btn) {
+  filterStatus = val;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPesananTable();
+}
+
+function filterPesanan() { renderPesananTable(); }
+function filterKlien()   { renderKlienTable(); }
+
+// ===== MODAL =====
+function openModal(id=null) {
+  editId = id;
+  document.getElementById('modal-title').textContent = id ? 'Edit Pesanan' : 'Tambah Pesanan Baru';
+
+  if (id) {
+    const p = pesanan.find(x=>x.id===id);
+    document.getElementById('f-pria').value    = p.pria;
+    document.getElementById('f-wanita').value  = p.wanita;
+    document.getElementById('f-wa').value      = p.wa;
+    document.getElementById('f-tglnikah').value= p.tglnikah;
+    document.getElementById('f-template').value= p.template;
+    document.getElementById('f-paket').value   = p.paket;
+    document.getElementById('f-status').value  = p.status;
+    document.getElementById('f-bayar').value   = p.bayar;
+    document.getElementById('f-catatan').value = p.catatan;
+  } else {
+    ['f-pria','f-wanita','f-wa','f-tglnikah','f-catatan'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-template').value='Elegant Gold';
+    document.getElementById('f-paket').value='Premium';
+    document.getElementById('f-status').value='Baru';
+    document.getElementById('f-bayar').value='Belum';
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openEditModal(id) { openModal(id); }
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  editId = null;
+}
+
+function savePesanan() {
+  const pria   = document.getElementById('f-pria').value.trim();
+  const wanita = document.getElementById('f-wanita').value.trim();
+  if (!pria || !wanita) { showToast('⚠️','Nama mempelai tidak boleh kosong'); return; }
+
+  const now = new Date().toISOString().split('T')[0];
+  const deadline = new Date(); deadline.setDate(deadline.getDate()+2);
+  const dlStr = deadline.toISOString().split('T')[0];
+
+  const data = {
+    pria, wanita,
+    wa:       document.getElementById('f-wa').value.trim(),
+    tglnikah: document.getElementById('f-tglnikah').value,
+    template: document.getElementById('f-template').value,
+    paket:    document.getElementById('f-paket').value,
+    status:   document.getElementById('f-status').value,
+    bayar:    document.getElementById('f-bayar').value,
+    catatan:  document.getElementById('f-catatan').value.trim(),
+    tglpesan: now,
+    deadline: dlStr,
+  };
+
+  if (editId) {
+    const idx = pesanan.findIndex(p=>p.id===editId);
+    pesanan[idx] = { ...pesanan[idx], ...data };
+    showToast('✅', 'Pesanan berhasil diupdate');
+  } else {
+    data.id = genId();
+    pesanan.unshift(data);
+    showToast('✅', 'Pesanan baru berhasil ditambahkan');
+  }
+
+  save();
+  closeModal();
+  renderAll();
+}
+
+function deletePesanan(id) {
+  if (!confirm(`Hapus pesanan ${id}?`)) return;
+  pesanan = pesanan.filter(p=>p.id!==id);
+  save();
+  renderAll();
+  showToast('🗑️', 'Pesanan dihapus');
+}
+
+function quickStatus(id) {
+  const order = ['Baru','Proses','Revisi','Selesai'];
+  const p = pesanan.find(x=>x.id===id);
+  const next = order[(order.indexOf(p.status)+1) % order.length];
+  p.status = next;
+  save();
+  renderAll();
+  showToast('▶', `Status → ${next}`);
+}
+
+// ===== TOAST =====
+
+// ===== OPEN INVOICE =====
+function openInvoice(id) {
+  // Save selected order id to localStorage so invoice.html can pick it up
+  localStorage.setItem('ns_invoice_target', id);
+  window.open('invoice.html', '_blank');
+  showToast('🧾', 'Membuka invoice untuk ' + id);
+}
+function showToast(icon, msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

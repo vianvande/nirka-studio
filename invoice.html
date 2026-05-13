@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Generator · Nirka Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0F1117;
+    --bg2:      #161820;
+    --bg3:      #1E2030;
+    --border:   rgba(255,255,255,0.07);
+    --text:     #E8E9F0;
+    --text-dim: #6B7280;
+    --text-mid: #9BA3AF;
+    --gold:     #F0B429;
+    --green:    #34D399;
+    --green-d:  rgba(52,211,153,0.12);
+    --orange:   #FB923C;
+    --orange-d: rgba(251,146,60,0.12);
+    --red:      #F87171;
+    --red-d:    rgba(248,113,113,0.12);
+    --blue:     #60A5FA;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== LAYOUT ===== */
+  .app {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ===== SIDEBAR PANEL ===== */
+  .panel {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+
+  .panel-head {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .panel-head::before {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .panel-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .panel-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .panel-body { padding: 20px; flex:1; }
+
+  .field-label {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 7px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .field-input, .field-select, .field-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 14px;
+  }
+  .field-input:focus,
+  .field-select:focus,
+  .field-textarea:focus { border-color: var(--gold); }
+  .field-select option { background: var(--bg3); }
+  .field-textarea { resize: vertical; min-height: 70px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .section-divider {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    padding: 14px 0 10px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  /* Paket pills */
+  .paket-pills { display: flex; gap: 6px; margin-bottom: 14px; }
+  .paket-pill {
+    flex:1;
+    padding: 8px 6px;
+    border: 1px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .paket-pill:hover { border-color: var(--gold); color: var(--gold); }
+  .paket-pill.active {
+    background: rgba(240,180,41,0.1);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Payment status */
+  .pay-pills { display: flex; gap: 6px; margin-bottom: 14px; }
+  .pay-pill {
+    flex:1;
+    padding: 8px 6px;
+    border: 1px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+  .pay-pill:hover { border-color: var(--green); color: var(--green); }
+  .pay-pill.active.lunas  { background: var(--green-d); border-color: var(--green); color: var(--green); }
+  .pay-pill.active.dp     { background: var(--orange-d); border-color: var(--orange); color: var(--orange); }
+  .pay-pill.active.belum  { background: var(--red-d); border-color: var(--red); color: var(--red); }
+
+  .panel-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-generate {
+    width: 100%;
+    padding: 12px;
+    background: var(--gold);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--bg);
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .btn-generate:hover { background: #F5C842; }
+
+  .btn-print {
+    width: 100%;
+    padding: 11px;
+    background: transparent;
+    border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-print:hover { border-color: var(--text-mid); color: var(--text); }
+
+  .btn-wa {
+    width: 100%;
+    padding: 11px;
+    background: transparent;
+    border: 1px solid rgba(52,211,153,0.3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--green);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-wa:hover { background: var(--green-d); }
+
+  /* Load from admin */
+  .load-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .load-select {
+    flex:1;
+    padding: 9px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    outline: none;
+  }
+  .load-btn {
+    padding: 9px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+  .load-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ===== PREVIEW AREA ===== */
+  .preview-area {
+    background: #E8E8E8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px;
+    overflow-y: auto;
+  }
+
+  .preview-toolbar {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .preview-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #666;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .zoom-btns {
+    display: flex;
+    gap: 6px;
+  }
+  .zoom-btn {
+    padding: 5px 12px;
+    background: white;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+  }
+  .zoom-btn:hover { background: #f0f0f0; }
+
+  /* ===== INVOICE PAPER ===== */
+  #invoice-paper {
+    width: 100%;
+    max-width: 680px;
+    background: white;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.15);
+    font-family: 'DM Sans', sans-serif;
+    color: #1A1A1A;
+    transform-origin: top center;
+    transition: transform 0.2s;
+  }
+
+  /* Invoice Header */
+  .inv-header {
+    background: #0F1117;
+    padding: 36px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .inv-header::before {
+    content:'';
+    position: absolute;
+    top:0; left:0; right:0; height: 3px;
+    background: linear-gradient(90deg, #F0B429, #F5C842, #F0B429);
+  }
+
+  .inv-header-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .inv-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    letter-spacing: 5px;
+    color: #F0B429;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .inv-brand-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .inv-title-box { text-align: right; }
+
+  .inv-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-style: italic;
+    color: white;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .inv-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 2px;
+  }
+
+  /* Status ribbon */
+  .inv-status-bar {
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .inv-status-bar.lunas  { background: #ECFDF5; color: #065F46; border-bottom: 1px solid #D1FAE5; }
+  .inv-status-bar.dp     { background: #FFF7ED; color: #9A3412; border-bottom: 1px solid #FED7AA; }
+  .inv-status-bar.belum  { background: #FEF2F2; color: #991B1B; border-bottom: 1px solid #FEE2E2; }
+
+  .inv-status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .lunas  .inv-status-dot { background: #10B981; }
+  .dp     .inv-status-dot { background: #F59E0B; }
+  .belum  .inv-status-dot { background: #EF4444; }
+
+  /* Invoice Body */
+  .inv-body { padding: 36px 40px; }
+
+  /* Meta grid */
+  .inv-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-bottom: 32px;
+    border: 1px solid #E5E7EB;
+  }
+
+  .inv-meta-cell {
+    padding: 16px 20px;
+    border-right: 1px solid #E5E7EB;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .inv-meta-cell:nth-child(2n) { border-right: none; }
+  .inv-meta-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+  .meta-key {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 5px;
+  }
+
+  .meta-val {
+    font-size: 13px;
+    color: #1A1A1A;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Items table */
+  .inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+  }
+
+  .inv-table th {
+    padding: 10px 14px;
+    background: #F9FAFB;
+    text-align: left;
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6B7280;
+    font-family: 'DM Mono', monospace;
+    border: 1px solid #E5E7EB;
+    font-weight: 500;
+  }
+
+  .inv-table td {
+    padding: 14px;
+    border: 1px solid #E5E7EB;
+    font-size: 13px;
+    vertical-align: top;
+  }
+
+  .inv-table tr:hover td { background: #FAFAFA; }
+
+  .item-name { font-weight: 500; color: #111; margin-bottom: 3px; }
+  .item-desc { font-size: 11px; color: #9CA3AF; line-height: 1.5; }
+
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+
+  /* Totals */
+  .inv-totals {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 28px;
+  }
+
+  .totals-box { width: 260px; }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #4B5563;
+    border-bottom: 1px solid #F3F4F6;
+  }
+
+  .total-row.grand {
+    padding: 12px 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    border-bottom: none;
+    border-top: 2px solid #111;
+    margin-top: 4px;
+  }
+
+  .total-row .lbl { color: #6B7280; font-size: 12px; }
+  .total-row.grand .lbl { color: #111; font-size: 16px; font-weight: 700; }
+
+  .total-val {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+
+  .total-row.grand .total-val { color: #F0B429; font-size: 18px; }
+
+  .paid-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 8px 0;
+    color: #10B981;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #F3F4F6;
+  }
+
+  .remaining-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+  .remaining-amount.zero { color: #10B981; }
+  .remaining-amount.has  { color: #EF4444; }
+
+  /* Payment info */
+  .inv-payment {
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .pay-title {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 14px;
+  }
+
+  .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .pay-item .pay-bank {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #6B7280;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .pay-item .pay-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    color: #111;
+    font-weight: 500;
+    letter-spacing: 2px;
+  }
+
+  .pay-item .pay-name {
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-top: 2px;
+  }
+
+  /* Notes */
+  .inv-notes {
+    border-left: 3px solid #F0B429;
+    padding: 12px 16px;
+    background: #FFFBEB;
+    margin-bottom: 24px;
+  }
+  .notes-title {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: #92400E;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 6px;
+  }
+  .notes-text {
+    font-size: 12px;
+    color: #78350F;
+    line-height: 1.7;
+  }
+
+  /* Footer */
+  .inv-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #E5E7EB;
+  }
+
+  .inv-footer-left {
+    font-size: 11px;
+    color: #9CA3AF;
+    line-height: 1.8;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .inv-footer-right { text-align: right; }
+
+  .sign-area {
+    width: 140px;
+    border-bottom: 1px solid #D1D5DB;
+    height: 48px;
+    margin-bottom: 6px;
+    position: relative;
+  }
+  .sign-area::after {
+    content: 'Nirka Studio';
+    position: absolute;
+    bottom: -20px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #6B7280;
+  }
+
+  .sign-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-top: 28px;
+  }
+
+  /* Watermark for LUNAS */
+  .inv-watermark {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotate(-30deg);
+    font-family: 'DM Mono', monospace;
+    font-size: 80px;
+    letter-spacing: 8px;
+    font-weight: 700;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    text-transform: uppercase;
+  }
+  .inv-watermark.lunas  { color: rgba(16,185,129,0.07); opacity:1; }
+  .inv-watermark.belum  { color: rgba(239,68,68,0.06); opacity:1; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--bg2);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 18px;
+    font-size: 12px;
+    color: var(--text);
+    z-index: 500;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toast.show { opacity:1; transform:translateY(0); }
+
+  /* ===== PRINT STYLES ===== */
+  @media print {
+    body { background: white !important; }
+    .app { display:block !important; }
+    .panel { display:none !important; }
+    .preview-area { background: white !important; padding: 0 !important; }
+    .preview-toolbar { display:none !important; }
+    #invoice-paper {
+      box-shadow: none !important;
+      max-width: 100% !important;
+      width: 100% !important;
+    }
+    @page { margin: 0; size: A4; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .panel { position:static; max-height:none; border-right:none; border-bottom:1px solid var(--border); }
+    .preview-area { min-height:600px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== LEFT PANEL: FORM ===== -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-logo">Nirka Studio</div>
+      <div class="panel-sub">Invoice Generator</div>
+    </div>
+
+    <div class="panel-body">
+
+      <!-- Load from admin -->
+      <div class="section-divider">📂 Muat dari Data Pesanan</div>
+      <div class="load-bar">
+        <select class="load-select" id="load-select">
+          <option value="">— Pilih pesanan —</option>
+        </select>
+        <button class="load-btn" onclick="loadFromAdmin()">Muat ↓</button>
+      </div>
+
+      <!-- Client Info -->
+      <div class="section-divider">👫 Data Klien</div>
+
+      <label class="field-label">Nama Mempelai Pria</label>
+      <input type="text" class="field-input" id="f-pria" placeholder="cth: Arjuna" oninput="autoGenerate()">
+
+      <label class="field-label">Nama Mempelai Wanita</label>
+      <input type="text" class="field-input" id="f-wanita" placeholder="cth: Salsabila" oninput="autoGenerate()">
+
+      <label class="field-label">No. WhatsApp Klien</label>
+      <input type="text" class="field-input" id="f-wa" placeholder="08xxxxxxxxxx" oninput="autoGenerate()">
+
+      <div class="field-row">
+        <div>
+          <label class="field-label">Tanggal Invoice</label>
+          <input type="date" class="field-input" id="f-tglinv" oninput="autoGenerate()">
+        </div>
+        <div>
+          <label class="field-label">Tanggal Nikah</label>
+          <input type="date" class="field-input" id="f-tglnikah" oninput="autoGenerate()">
+        </div>
+      </div>
+
+      <!-- Paket -->
+      <div class="section-divider">📦 Paket & Template</div>
+
+      <label class="field-label">Paket</label>
+      <div class="paket-pills">
+        <div class="paket-pill active" onclick="setPaket('Starter',this)">Starter<br><small>149rb</small></div>
+        <div class="paket-pill" onclick="setPaket('Premium',this)">Premium<br><small>249rb</small></div>
+        <div class="paket-pill" onclick="setPaket('VIP',this)">VIP<br><small>399rb</small></div>
+      </div>
+
+      <label class="field-label">Template</label>
+      <select class="field-select" id="f-template" onchange="autoGenerate()">
+        <option>Elegant Gold</option>
+        <option>Nusantara Heritage</option>
+        <option>Floral Romance</option>
+        <option>Minimalist Modern</option>
+        <option>Bold Contemporary</option>
+      </select>
+
+      <!-- Extra biaya -->
+      <label class="field-label">Biaya Tambahan (opsional)</label>
+      <div class="field-row">
+        <input type="text" class="field-input" id="f-extra-name" placeholder="cth: Prioritas 1 hari" oninput="autoGenerate()">
+        <input type="number" class="field-input" id="f-extra-val" placeholder="50000" min="0" oninput="autoGenerate()">
+      </div>
+
+      <!-- Payment -->
+      <div class="section-divider">💳 Status Pembayaran</div>
+
+      <div class="pay-pills">
+        <div class="pay-pill active belum" onclick="setPayment('belum',this)">Belum</div>
+        <div class="pay-pill" onclick="setPayment('dp',this)">DP 50%</div>
+        <div class="pay-pill" onclick="setPayment('lunas',this)">Lunas</div>
+      </div>
+
+      <!-- Catatan -->
+      <div class="section-divider">📝 Catatan</div>
+      <textarea class="field-textarea" id="f-catatan" placeholder="Catatan revisi, permintaan khusus, dll..." oninput="autoGenerate()"></textarea>
+
+      <!-- Invoice number -->
+      <label class="field-label">Nomor Invoice</label>
+      <input type="text" class="field-input" id="f-invno" placeholder="INV/2025/001" oninput="autoGenerate()">
+
+    </div>
+
+    <div class="panel-footer">
+      <button class="btn-generate" onclick="autoGenerate()">⚡ Generate Invoice</button>
+      <button class="btn-print" onclick="printInvoice()">🖨️ Print / Save PDF</button>
+      <button class="btn-wa" onclick="shareWA()">💬 Kirim via WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT: PREVIEW ===== -->
+  <div class="preview-area">
+    <div class="preview-toolbar">
+      <div class="preview-label">Preview Invoice</div>
+      <div class="zoom-btns">
+        <button class="zoom-btn" onclick="zoom(-0.1)">−</button>
+        <button class="zoom-btn" onclick="zoom(0)">Reset</button>
+        <button class="zoom-btn" onclick="zoom(0.1)">+</button>
+      </div>
+    </div>
+
+    <!-- The actual invoice -->
+    <div id="invoice-paper">
+
+      <!-- Header -->
+      <div class="inv-header">
+        <div class="inv-header-grid">
+          <div>
+            <div class="inv-brand">Nirka Studio</div>
+            <div class="inv-brand-sub">Digital Wedding Invitation</div>
+          </div>
+          <div class="inv-title-box">
+            <div class="inv-title">Invoice</div>
+            <div class="inv-number" id="inv-number">INV/2025/001</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="inv-status-bar belum" id="inv-status-bar">
+        <div class="inv-status-dot"></div>
+        <span id="inv-status-text">BELUM DIBAYAR</span>
+        <span style="margin-left:auto;font-size:9px;opacity:0.6;" id="inv-date-bar"></span>
+      </div>
+
+      <!-- Watermark -->
+      <div style="position:relative; overflow:hidden;">
+        <div class="inv-watermark" id="inv-watermark"></div>
+
+        <div class="inv-body">
+
+          <!-- Meta -->
+          <div class="inv-meta">
+            <div class="inv-meta-cell">
+              <div class="meta-key">Kepada</div>
+              <div class="meta-val" id="inv-to">—</div>
+            </div>
+            <div class="inv-meta-cell">
+              <div class="meta-key">No. WhatsApp</div>
+              <div class="meta-val" id="inv-wa">—</div>
+            </div>
+            <div class="inv-meta-cell">
+              <div class="meta-key">Tanggal Invoice</div>
+              <div class="meta-val" id="inv-tgl">—</div>
+            </div>
+            <div class="inv-meta-cell">
+              <div class="meta-key">Tanggal Pernikahan</div>
+              <div class="meta-val" id="inv-tglnikah">—</div>
+            </div>
+          </div>
+
+          <!-- Items -->
+          <table class="inv-table">
+            <thead>
+              <tr>
+                <th style="width:50%">Deskripsi</th>
+                <th class="text-center">Qty</th>
+                <th class="text-right">Harga</th>
+                <th class="text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody id="inv-items"></tbody>
+          </table>
+
+          <!-- Totals -->
+          <div class="inv-totals">
+            <div class="totals-box" id="inv-totals-box"></div>
+          </div>
+
+          <!-- Payment Info -->
+          <div class="inv-payment">
+            <div class="pay-title">Informasi Pembayaran</div>
+            <div class="pay-grid">
+              <div class="pay-item">
+                <div class="pay-bank">BCA</div>
+                <div class="pay-num">1234 5678 90</div>
+                <div class="pay-name">a.n. Nirka Studio</div>
+              </div>
+              <div class="pay-item">
+                <div class="pay-bank">Mandiri</div>
+                <div class="pay-num">0987 6543 21</div>
+                <div class="pay-name">a.n. Nirka Studio</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="inv-notes" id="inv-notes-wrap" style="display:none;">
+            <div class="notes-title">Catatan</div>
+            <div class="notes-text" id="inv-notes-text"></div>
+          </div>
+
+          <!-- Syarat -->
+          <div class="inv-notes" style="background:#F8FAFC; border-left-color: #CBD5E1;">
+            <div class="notes-title" style="color:#475569;">Syarat & Ketentuan</div>
+            <div class="notes-text" style="color:#64748B;">
+              • Pembayaran DP minimal 50% untuk memulai pengerjaan.<br>
+              • Proses pengerjaan 2 hari kerja setelah data lengkap diterima.<br>
+              • Revisi gratis 3x, setelahnya Rp20.000/revisi.<br>
+              • Undangan aktif sesuai masa aktif paket yang dipilih.
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="inv-footer">
+            <div class="inv-footer-left">
+              Nirka Studio<br>
+              nirkastudio.com<br>
+              WA: 08xxxxxxxxxx<br>
+              <br>
+              Terima kasih atas kepercayaan Anda 🤍
+            </div>
+            <div class="inv-footer-right">
+              <div class="sign-area"></div>
+              <div class="sign-label">Hormat Kami</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="t-icon">✓</span>
+  <span id="t-msg">Berhasil</span>
+</div>
+
+<script>
+  // ===== STATE =====
+  const HARGA = { Starter: 149000, Premium: 249000, VIP: 399000 };
+  const FITUR = {
+    Starter: ['Template pilihan', 'Semua fitur dasar', 'RSVP & ucapan tamu', 'Countdown timer', 'Aktif 3 bulan', 'Free 2x revisi'],
+    Premium: ['Template pilihan', 'Semua fitur lengkap', 'Galeri foto', 'Wedding gift & RSVP', 'Musik background', 'QR Code check-in', 'Aktif 6 bulan', 'Free 3x revisi'],
+    VIP:     ['Custom domain', 'Semua fitur Premium', 'Selesai dalam 6 jam', 'Custom warna & font', 'Video background', 'Aktif 12 bulan', 'Unlimited revisi', 'Prioritas support'],
+  };
+
+  let paketVal   = 'Starter';
+  let paymentVal = 'belum';
+  let zoomLevel  = 1;
+
+  // ===== INIT =====
+  window.onload = () => {
+    // Set today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('f-tglinv').value = today;
+
+    // Generate invoice number
+    const invCount = parseInt(localStorage.getItem('ns_inv_count')||'0') + 1;
+    const yr = new Date().getFullYear();
+    const mo = String(new Date().getMonth()+1).padStart(2,'0');
+    document.getElementById('f-invno').value = `INV/${yr}/${mo}/${String(invCount).padStart(3,'0')}`;
+
+    // Load pesanan from admin localStorage
+    loadPesananList();
+
+    // Auto-load if opened from admin dashboard
+    const targetId = localStorage.getItem('ns_invoice_target');
+    if (targetId) {
+      localStorage.removeItem('ns_invoice_target');
+      const pesanan = JSON.parse(localStorage.getItem('ns_pesanan') || '[]');
+      const idx = pesanan.findIndex(p => p.id === targetId);
+      if (idx !== -1) {
+        document.getElementById('load-select').value = idx;
+        loadFromAdmin();
+        return; // autoGenerate already called inside loadFromAdmin
+      }
+    }
+
+    // Default demo values (only if not loaded from admin)
+    document.getElementById('f-pria').value    = 'Arjuna';
+    document.getElementById('f-wanita').value  = 'Salsabila';
+    document.getElementById('f-wa').value      = '081234567890';
+    document.getElementById('f-tglnikah').value = '2025-06-14';
+
+    autoGenerate();
+  };
+
+  // ===== LOAD PESANAN =====
+  function loadPesananList() {
+    const pesanan = JSON.parse(localStorage.getItem('ns_pesanan')||'[]');
+    const sel = document.getElementById('load-select');
+    sel.innerHTML = '<option value="">— Pilih pesanan —</option>';
+    pesanan.forEach((p,i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${p.id} · ${p.pria} & ${p.wanita}`;
+      sel.appendChild(opt);
+    });
+  }
+
+  function loadFromAdmin() {
+    const idx = document.getElementById('load-select').value;
+    if (idx === '') { showToast('⚠️', 'Pilih pesanan terlebih dahulu'); return; }
+    const pesanan = JSON.parse(localStorage.getItem('ns_pesanan')||'[]');
+    const p = pesanan[parseInt(idx)];
+    if (!p) return;
+
+    document.getElementById('f-pria').value    = p.pria;
+    document.getElementById('f-wanita').value  = p.wanita;
+    document.getElementById('f-wa').value      = p.wa;
+    document.getElementById('f-tglnikah').value= p.tglnikah;
+    document.getElementById('f-template').value= p.template;
+    document.getElementById('f-catatan').value = p.catatan;
+
+    // Set paket
+    document.querySelectorAll('.paket-pill').forEach(el=>el.classList.remove('active'));
+    document.querySelectorAll('.paket-pill').forEach(el=>{
+      if(el.textContent.trim().startsWith(p.paket)) el.classList.add('active');
+    });
+    paketVal = p.paket;
+
+    // Set payment
+    const bayarMap = { Lunas:'lunas', DP:'dp', Belum:'belum' };
+    const pv = bayarMap[p.bayar] || 'belum';
+    document.querySelectorAll('.pay-pill').forEach(el=>el.classList.remove('active','lunas','dp','belum'));
+    document.querySelectorAll('.pay-pill').forEach(el=>{
+      const txt = el.textContent.trim().toLowerCase();
+      if ((pv==='belum'&&txt==='belum')||(pv==='dp'&&txt.includes('dp'))||(pv==='lunas'&&txt==='lunas')) {
+        el.classList.add('active', pv);
+      }
+    });
+    paymentVal = pv;
+
+    autoGenerate();
+    showToast('✅', `Data ${p.pria} & ${p.wanita} dimuat`);
+  }
+
+  // ===== PAKET & PAYMENT =====
+  function setPaket(val, el) {
+    paketVal = val;
+    document.querySelectorAll('.paket-pill').forEach(p=>p.classList.remove('active'));
+    el.classList.add('active');
+    autoGenerate();
+  }
+
+  function setPayment(val, el) {
+    paymentVal = val;
+    document.querySelectorAll('.pay-pill').forEach(p=>p.classList.remove('active','lunas','dp','belum'));
+    el.classList.add('active', val);
+    autoGenerate();
+  }
+
+  // ===== FORMAT =====
+  function fmtRp(n) {
+    return 'Rp' + n.toLocaleString('id-ID');
+  }
+
+  function fmtDate(str) {
+    if (!str) return '—';
+    const d = new Date(str);
+    return d.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  // ===== GENERATE =====
+  function autoGenerate() {
+    const pria    = document.getElementById('f-pria').value.trim() || '—';
+    const wanita  = document.getElementById('f-wanita').value.trim() || '—';
+    const wa      = document.getElementById('f-wa').value.trim() || '—';
+    const tglinv  = document.getElementById('f-tglinv').value;
+    const tglnikah= document.getElementById('f-tglnikah').value;
+    const template= document.getElementById('f-template').value;
+    const catatan = document.getElementById('f-catatan').value.trim();
+    const invno   = document.getElementById('f-invno').value.trim() || 'INV/2025/001';
+    const extraName = document.getElementById('f-extra-name').value.trim();
+    const extraVal  = parseInt(document.getElementById('f-extra-val').value)||0;
+
+    const harga     = HARGA[paketVal];
+    const subtotal  = harga + extraVal;
+    const dp        = Math.ceil(subtotal * 0.5);
+    const lunas     = subtotal;
+
+    // Update header
+    document.getElementById('inv-number').textContent = invno;
+    document.getElementById('inv-to').textContent = `${pria} & ${wanita}`;
+    document.getElementById('inv-wa').textContent = wa;
+    document.getElementById('inv-tgl').textContent = fmtDate(tglinv);
+    document.getElementById('inv-tglnikah').textContent = fmtDate(tglnikah);
+    document.getElementById('inv-date-bar').textContent = fmtDate(tglinv);
+
+    // Status bar
+    const statusBar = document.getElementById('inv-status-bar');
+    const statusText = document.getElementById('inv-status-text');
+    const watermark  = document.getElementById('inv-watermark');
+    statusBar.className = `inv-status-bar ${paymentVal}`;
+    statusText.textContent = paymentVal === 'lunas' ? 'LUNAS' : paymentVal === 'dp' ? 'DP — BELUM LUNAS' : 'BELUM DIBAYAR';
+    watermark.className = `inv-watermark ${paymentVal==='lunas'?'lunas':paymentVal==='belum'?'belum':''}`;
+    watermark.textContent = paymentVal === 'lunas' ? 'LUNAS' : paymentVal === 'belum' ? 'UNPAID' : '';
+
+    // Items
+    const fiturList = FITUR[paketVal].map(f=>`• ${f}`).join('<br>');
+    let itemsHTML = `
+      <tr>
+        <td>
+          <div class="item-name">Undangan Digital — Paket ${paketVal}</div>
+          <div class="item-desc">Template: ${template}<br>${fiturList}</div>
+        </td>
+        <td class="text-center">1</td>
+        <td class="text-right" style="font-family:'DM Mono',monospace;">${fmtRp(harga)}</td>
+        <td class="text-right" style="font-family:'DM Mono',monospace;font-weight:500;">${fmtRp(harga)}</td>
+      </tr>`;
+
+    if (extraName && extraVal > 0) {
+      itemsHTML += `
+        <tr>
+          <td>
+            <div class="item-name">${extraName}</div>
+            <div class="item-desc">Biaya tambahan</div>
+          </td>
+          <td class="text-center">1</td>
+          <td class="text-right" style="font-family:'DM Mono',monospace;">${fmtRp(extraVal)}</td>
+          <td class="text-right" style="font-family:'DM Mono',monospace;font-weight:500;">${fmtRp(extraVal)}</td>
+        </tr>`;
+    }
+
+    document.getElementById('inv-items').innerHTML = itemsHTML;
+
+    // Totals
+    let totalsHTML = `
+      <div class="total-row">
+        <span class="lbl">Subtotal</span>
+        <span class="total-val">${fmtRp(subtotal)}</span>
+      </div>`;
+
+    if (paymentVal === 'dp') {
+      totalsHTML += `
+        <div class="total-row grand">
+          <span class="lbl">Total</span>
+          <span class="total-val">${fmtRp(subtotal)}</span>
+        </div>
+        <div class="paid-amount">
+          <span>Sudah dibayar (DP 50%)</span>
+          <span>${fmtRp(dp)}</span>
+        </div>
+        <div class="remaining-amount has">
+          <span>Sisa tagihan</span>
+          <span>${fmtRp(subtotal - dp)}</span>
+        </div>`;
+    } else if (paymentVal === 'lunas') {
+      totalsHTML += `
+        <div class="total-row grand">
+          <span class="lbl">Total</span>
+          <span class="total-val">${fmtRp(subtotal)}</span>
+        </div>
+        <div class="paid-amount">
+          <span>Sudah dibayar (Lunas)</span>
+          <span>${fmtRp(subtotal)}</span>
+        </div>
+        <div class="remaining-amount zero">
+          <span>Sisa tagihan</span>
+          <span>Rp0</span>
+        </div>`;
+    } else {
+      totalsHTML += `
+        <div class="total-row grand">
+          <span class="lbl">Total</span>
+          <span class="total-val">${fmtRp(subtotal)}</span>
+        </div>
+        <div class="remaining-amount has">
+          <span>Tagihan</span>
+          <span>${fmtRp(subtotal)}</span>
+        </div>`;
+    }
+
+    document.getElementById('inv-totals-box').innerHTML = totalsHTML;
+
+    // Notes
+    if (catatan) {
+      document.getElementById('inv-notes-wrap').style.display = 'block';
+      document.getElementById('inv-notes-text').textContent = catatan;
+    } else {
+      document.getElementById('inv-notes-wrap').style.display = 'none';
+    }
+  }
+
+  // ===== ZOOM =====
+  function zoom(delta) {
+    if (delta === 0) { zoomLevel = 1; }
+    else { zoomLevel = Math.min(1.4, Math.max(0.5, zoomLevel + delta)); }
+    document.getElementById('invoice-paper').style.transform = `scale(${zoomLevel})`;
+    document.getElementById('invoice-paper').style.marginBottom = zoomLevel < 1 ? `${(1-zoomLevel)*-400}px` : '0';
+  }
+
+  // ===== PRINT =====
+  function printInvoice() {
+    // Save invoice count
+    const c = parseInt(localStorage.getItem('ns_inv_count')||'0') + 1;
+    localStorage.setItem('ns_inv_count', c);
+    window.print();
+    showToast('🖨️', 'Dialog print dibuka');
+  }
+
+  // ===== SHARE WA =====
+  function shareWA() {
+    const pria   = document.getElementById('f-pria').value.trim() || '—';
+    const wanita = document.getElementById('f-wanita').value.trim() || '—';
+    const wa     = document.getElementById('f-wa').value.trim().replace(/\D/g,'').replace(/^0/,'62');
+    const invno  = document.getElementById('f-invno').value.trim();
+    const harga  = HARGA[paketVal];
+    const extraVal = parseInt(document.getElementById('f-extra-val').value)||0;
+    const total  = harga + extraVal;
+    const dp     = Math.ceil(total * 0.5);
+
+    const statusTxt = paymentVal==='lunas' ? 'LUNAS ✅' : paymentVal==='dp' ? `DP — Sisa ${fmtRp(total-dp)}` : `Tagihan ${fmtRp(total)}`;
+
+    const msg = encodeURIComponent(
+`Halo Kak ${pria} & ${wanita} 🤍
+
+Berikut detail invoice undangan digital dari *Nirka Studio*:
+
+📋 *${invno}*
+📦 Paket: *${paketVal}* (${fmtRp(total)})
+🎨 Template: *${document.getElementById('f-template').value}*
+💳 Status: *${statusTxt}*
+
+Pembayaran dapat ditransfer ke:
+• BCA: *1234 5678 90* (a.n. Nirka Studio)
+• Mandiri: *0987 6543 21* (a.n. Nirka Studio)
+
+Mohon konfirmasi setelah melakukan pembayaran ya kak 🙏
+
+Terima kasih sudah mempercayakan undangan pernikahan kak ke Nirka Studio 💛
+_nirkastudio.com_`);
+
+    if (!wa || wa.length < 8) {
+      showToast('⚠️', 'Masukkan nomor WhatsApp klien dulu');
+      return;
+    }
+
+    window.open(`https://wa.me/${wa}?text=${msg}`, '_blank');
+    showToast('💬', 'Membuka WhatsApp...');
+  }
+
+  // ===== TOAST =====
+  function showToast(icon, msg) {
+    document.getElementById('t-icon').textContent = icon;
+    document.getElementById('t-msg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>

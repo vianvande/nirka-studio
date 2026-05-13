@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>The Wedding of Julian & Adeline | Digital Invitation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container" id="app">
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="overlay" id="overlay">
+        <div class="overlay-bg"></div>
+        <div class="overlay-content">
+            <p class="overlay-sub">The Wedding Of</p>
+            <h1>Julian<br>&amp; Adeline</h1>
+            <p class="overlay-date">24 · 05 · 2026</p>
+            <p class="overlay-to">Kepada Bapak/Ibu/Saudara/i</p>
+            <p class="overlay-name">Tamu Undangan</p>
+            <button class="btn-open" id="btn-open">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Buka Undangan
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== FLOATING BUTTONS ===== -->
+    <div class="fab-group" id="fab-group" style="display:none">
+        <button class="fab fab-music" id="fab-music" title="Musik">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
+        </button>
+        <a href="https://wa.me/628123456789" class="fab fab-wa" target="_blank" title="WhatsApp">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.553 4.1 1.518 5.824L.057 23.927a.5.5 0 00.623.598l6.305-1.652A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.374l-.36-.213-3.718.974.992-3.625-.233-.371A9.818 9.818 0 1112 21.818z"/></svg>
+        </a>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+        <div class="hero-arch">
+            <img src="assets/cover.png" alt="Julian & Adeline">
+        </div>
+        <p class="hero-script">Save The Date</p>
+        <h1 class="hero-names">Julian &amp; Adeline</h1>
+        <p class="hero-date">24 &nbsp;·&nbsp; 05 &nbsp;·&nbsp; 2026</p>
+
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ===== QUOTE ===== -->
+    <section class="quote" id="quote">
+        <div class="quote-ornament reveal delay-1">
+            <!-- Ornament SVG (Rose/Leaf) -->
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 8C20 8 12 20 12 32s8 24 20 24 20-12 20-24S44 8 32 8z" stroke="rgba(197,160,89,0.7)" stroke-width="1.5" fill="none"/>
+                <path d="M32 16c-4 4-8 12-8 20s4 12 8 12 8-4 8-12-4-16-8-20z" fill="rgba(197,160,89,0.25)"/>
+            </svg>
+        </div>
+        <p class="reveal delay-2">"Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."</p>
+        <p class="quote-ref reveal delay-3">QS. Ar-Rum : 21</p>
+    </section>
+
+    <!-- ===== COUPLE ===== -->
+    <section class="couple" id="couple">
+        <p class="section-label reveal">Mempelai</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:32px;">The Bride & Groom</h2>
+
+        <div class="couple-card reveal delay-2">
+            <img src="assets/cover.png" class="couple-photo" alt="Julian Putra">
+            <h3>Julian Putra, S.T.</h3>
+            <p>Putra dari Bpk. Bambang Santoso<br>& Ibu Siti Rahayu</p>
+            <a href="#">@julian_putra</a>
+        </div>
+
+        <div class="couple-ampersand reveal delay-3">&amp;</div>
+
+        <div class="couple-card reveal delay-4">
+            <img src="assets/cover.png" class="couple-photo" alt="Adeline Putri">
+            <h3>Adeline Putri, S.E.</h3>
+            <p>Putri dari Bpk. Ahmad Fauzi<br>& Ibu Linda Kusuma</p>
+            <a href="#">@adeline_putri</a>
+        </div>
+    </section>
+
+    <!-- ===== EVENT ===== -->
+    <section class="event" id="event">
+        <p class="section-label reveal">Mark Your Calendar</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:4px;">The Wedding Event</h2>
+
+        <div class="countdown reveal delay-2">
+            <div class="count-item"><span id="days">00</span><label>Hari</label></div>
+            <div class="count-item"><span id="hours">00</span><label>Jam</label></div>
+            <div class="count-item"><span id="mins">00</span><label>Menit</label></div>
+            <div class="count-item"><span id="secs">00</span><label>Detik</label></div>
+        </div>
+
+        <div class="event-card reveal delay-2">
+            <div class="event-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="#C5A059"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div class="event-body">
+                <h3>Akad Nikah</h3>
+                <p>Minggu, 24 Mei 2026<br>08:00 – 10:00 WIB<br><strong>Masjid Raya Al-Azhar, Jakarta</strong></p>
+                <button class="btn-map" onclick="window.open('https://maps.google.com')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Lihat Peta
+                </button>
+            </div>
+        </div>
+
+        <div class="event-card reveal delay-3">
+            <div class="event-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="#C5A059"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="event-body">
+                <h3>Resepsi Pernikahan</h3>
+                <p>Minggu, 24 Mei 2026<br>11:00 – 13:00 WIB<br><strong>The Grand Ballroom, Jakarta</strong></p>
+                <button class="btn-map" onclick="window.open('https://maps.google.com')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Lihat Peta
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== STORY ===== -->
+    <section class="story" id="story" style="background: var(--bg-alt);">
+        <p class="section-label reveal">Perjalanan Kami</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:40px;">Our Love Story</h2>
+
+        <div class="story-item reveal delay-2">
+            <img src="assets/gallery.png" class="story-img" alt="Pertama Bertemu">
+            <div>
+                <p class="story-year">2024</p>
+                <h3>Pertama Bertemu</h3>
+                <p>Awal mula pertemuan kami di sebuah acara seminar kampus yang tidak pernah kami rencanakan. Sebuah kebetulan yang ternyata adalah takdir.</p>
+            </div>
+        </div>
+
+        <div class="story-item reveal delay-2">
+            <img src="assets/gallery.png" class="story-img" alt="Pertama Kencan">
+            <div>
+                <p class="story-year">2025</p>
+                <h3>Lamaran</h3>
+                <p>Setelah setahun lebih mengenal satu sama lain, Julian memberanikan diri untuk melamar Adeline di tempat yang sama ketika mereka pertama bertemu.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== GIFT ===== -->
+    <section class="gift" id="gift">
+        <p class="section-label reveal" style="color:rgba(197,160,89,0.7)">Tanda Kasih</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; color:white; margin-bottom:12px;">Wedding Gift</h2>
+        <p class="reveal delay-2" style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:32px; line-height:1.8;">Doa restu Anda merupakan karunia terbesar. Namun jika ingin berbagi kebahagiaan, Anda dapat mengirimkan melalui:</p>
+
+        <div class="gift-card reveal delay-2">
+            <div class="gift-bank-logo">BCA</div>
+            <p style="font-size:0.75rem; color:rgba(255,255,255,0.4); letter-spacing:2px; text-transform:uppercase;">No. Rekening</p>
+            <p class="gift-acc" id="acc-bca">1234 5678 90</p>
+            <p class="gift-name">a.n Julian Putra</p>
+            <button class="copy-btn" id="copy-bca" onclick="copyText('1234567890', 'copy-bca')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                Salin Rekening
+            </button>
+        </div>
+
+        <div class="gift-card reveal delay-3">
+            <div class="gift-bank-logo">GPN</div>
+            <p style="font-size:0.75rem; color:rgba(255,255,255,0.4); letter-spacing:2px; text-transform:uppercase;">Alamat Pengiriman</p>
+            <p class="gift-acc" style="font-size:1rem; letter-spacing:0.5px;">Jl. Melati No. 12<br>Jakarta Selatan</p>
+            <p class="gift-name">a.n Julian & Adeline</p>
+        </div>
+    </section>
+
+    <!-- ===== RSVP ===== -->
+    <section class="rsvp" id="rsvp">
+        <p class="section-label reveal">Konfirmasi</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:8px;">RSVP</h2>
+        <p class="reveal delay-2" style="font-size:0.85rem; color:var(--text-mid); margin-bottom:32px;">Mohon konfirmasi kehadiran Anda sebelum 20 Mei 2026</p>
+
+        <div class="rsvp-card reveal delay-3">
+            <form id="rsvp-form" novalidate>
+
+                <!-- Attendance Choice -->
+                <p style="font-size:0.78rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-mid); margin-bottom:12px;">Konfirmasi Kehadiran</p>
+                <div class="attendance-grid">
+                    <div class="attendance-choice">
+                        <input type="radio" name="attendance" id="hadir" value="Hadir" checked>
+                        <label for="hadir">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            Hadir
+                        </label>
+                    </div>
+                    <div class="attendance-choice">
+                        <input type="radio" name="attendance" id="tidak-hadir" value="Tidak Hadir">
+                        <label for="tidak-hadir">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                            Tidak Hadir
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Name -->
+                <div class="field">
+                    <input type="text" id="rsvp-name" placeholder=" " required>
+                    <label for="rsvp-name">Nama Lengkap</label>
+                </div>
+
+                <!-- Guests Stepper -->
+                <div class="guests-stepper">
+                    <span class="stepper-label">Jumlah Tamu</span>
+                    <button type="button" class="stepper-btn" id="guests-minus">−</button>
+                    <span class="stepper-value" id="guests-val">1</span>
+                    <button type="button" class="stepper-btn" id="guests-plus">+</button>
+                </div>
+
+                <!-- Message -->
+                <div class="field">
+                    <textarea id="rsvp-msg" rows="4" placeholder=" "></textarea>
+                    <label for="rsvp-msg">Ucapan & Doa</label>
+                </div>
+
+                <button type="submit" class="btn-submit">Kirim Ucapan</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== WISHES ===== -->
+    <section class="wishes" id="wishes">
+        <p class="section-label reveal">Ucapan</p>
+        <h2 class="script reveal delay-1" style="font-size:2.5rem; margin-bottom:28px;">Wishes</h2>
+        <div id="wishes-container">
+            <!-- pre-filled wishes -->
+            <div class="wish-card">
+                <div class="wish-header">
+                    <div class="wish-avatar">S</div>
+                    <div class="wish-meta">
+                        <div class="wish-name">Sarah & Family</div>
+                        <div class="wish-attendance">✓ Hadir · 2 orang</div>
+                    </div>
+                </div>
+                <p class="wish-text">Selamat menempuh hidup baru Julian & Adeline! Semoga sakinah mawaddah warahmah, dan bahagia selalu. 🤍</p>
+            </div>
+            <div class="wish-card">
+                <div class="wish-header">
+                    <div class="wish-avatar">B</div>
+                    <div class="wish-meta">
+                        <div class="wish-name">Budi Santoso</div>
+                        <div class="wish-attendance">✓ Hadir · 1 orang</div>
+                    </div>
+                </div>
+                <p class="wish-text">Bahagia selalu sampai kakek nenek. Amin! Moga jadi keluarga yang selalu hangat dan penuh cinta.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>Made with 🤍 by <strong>Nirka Studio</strong></p>
+        <p style="margin-top:8px; opacity:0.4; font-size:0.72rem;">Digital Invitation · 2026</p>
+    </footer>
+
+</div><!-- end .app-container -->
+
+<script src="script.js"></script>
+</body>
+</html>

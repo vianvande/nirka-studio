@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Pemesanan · Nirka Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:     #C9A84C;
+    --gold-l:   #E8D08A;
+    --gold-d:   #9A7A2E;
+    --cream:    #FAF6EE;
+    --cream-d:  #F0E8D6;
+    --brown:    #3D2B1F;
+    --brown-l:  #6B4C3B;
+    --dark:     #1A0F0A;
+    --white:    #FFFFFF;
+    --green:    #2D7A5F;
+    --green-l:  #D4EDDE;
+    --red:      #C0392B;
+    --red-l:    #FDECEA;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--brown);
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--dark);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+  header::after {
+    content:'';
+    position:absolute;
+    bottom:0;left:0;right:0;height:2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .logo {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .header-tag {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--dark);
+    padding: 52px 24px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 55%);
+  }
+
+  .hero-content { position:relative; z-index:1; }
+
+  .hero-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 7vw, 52px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+  .hero-title em { font-style:italic; color: var(--gold-l); }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(14px, 3vw, 17px);
+    color: rgba(255,255,255,0.4);
+    margin-top: 12px;
+    line-height: 1.8;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-divider {
+    display:flex; align-items:center; gap:12px;
+    max-width: 160px;
+    margin: 20px auto 0;
+  }
+  .hero-divider span {
+    flex:1; height:1px;
+    background: linear-gradient(90deg,transparent,var(--gold));
+  }
+  .hero-divider span:last-child {
+    background: linear-gradient(90deg,var(--gold),transparent);
+  }
+  .hero-divider::before { content:'✦'; color:var(--gold); font-size:10px; flex-shrink:0; }
+
+  /* ===== STEPS BAR ===== */
+  .steps-bar {
+    background: var(--cream-d);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    padding: 16px 24px;
+  }
+
+  .steps-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .step-dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-circle {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--brown-l);
+    background: var(--cream-d);
+    transition: all 0.3s;
+  }
+  .step-circle.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--dark);
+    font-weight: 700;
+    box-shadow: 0 0 0 4px rgba(201,168,76,0.15);
+  }
+  .step-circle.done {
+    background: var(--dark);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .step-lbl {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    color: var(--brown-l);
+    white-space: nowrap;
+  }
+  .step-dot.active .step-lbl { color: var(--gold-d); }
+
+  .step-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(201,168,76,0.2);
+    margin: 0 8px;
+    margin-bottom: 22px;
+    max-width: 80px;
+    transition: background 0.3s;
+  }
+  .step-line.done { background: var(--gold); }
+
+  /* ===== FORM CONTAINER ===== */
+  .form-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ===== STEP PAGES ===== */
+  .step-page { display:none; }
+  .step-page.active { display:block; animation: slideIn 0.35s ease; }
+  @keyframes slideIn {
+    from { opacity:0; transform:translateX(16px); }
+    to   { opacity:1; transform:translateX(0); }
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--white);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 32px 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .card::before {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+    background: linear-gradient(90deg,transparent,var(--gold),transparent);
+  }
+
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold-d);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title-icon { font-size: 16px; }
+
+  /* ===== FORM FIELDS ===== */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+
+  .form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+  .form-group:last-child { margin-bottom:0; }
+
+  .form-label {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--gold-d);
+    text-transform: uppercase;
+  }
+
+  .form-label .req { color: var(--red); margin-left:2px; }
+
+  .form-input, .form-select, .form-textarea {
+    padding: 11px 14px;
+    border: 1px solid rgba(201,168,76,0.2);
+    background: var(--cream);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    color: var(--brown);
+    outline: none;
+    transition: border-color 0.25s, background 0.25s;
+    width: 100%;
+  }
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+  .form-input.error,
+  .form-select.error { border-color: var(--red); background: var(--red-l); }
+  .form-input::placeholder { color: rgba(107,76,59,0.4); }
+  .form-select option { background: var(--white); }
+  .form-textarea { resize:vertical; min-height:90px; }
+
+  .field-hint {
+    font-size: 10px;
+    color: var(--brown-l);
+    font-weight: 300;
+    margin-top: -10px;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+
+  .field-error {
+    font-size: 10px;
+    color: var(--red);
+    margin-top: -10px;
+    display: none;
+  }
+  .field-error.show { display:block; }
+
+  /* ===== TEMPLATE PICKER ===== */
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .tmpl-card {
+    border: 2px solid rgba(201,168,76,0.15);
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tmpl-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-2px); }
+  .tmpl-card.selected {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .tmpl-card.selected::after {
+    content:'✦';
+    position:absolute;
+    top:8px; right:8px;
+    width:22px; height:22px;
+    background: var(--gold);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+    color: var(--dark);
+    line-height:22px;
+    text-align:center;
+  }
+
+  .tmpl-preview {
+    height: 100px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Cormorant Garamond',serif;
+    font-size:13px;
+    font-style:italic;
+  }
+  .tmpl-preview.t1 { background:linear-gradient(135deg,#2A1E14,#3D2B1F); color:rgba(201,168,76,0.8); }
+  .tmpl-preview.t2 { background:linear-gradient(135deg,#2d1b0e,#4a2c16); color:#c4956a; }
+  .tmpl-preview.t3 { background:linear-gradient(135deg,#f8f0f5,#e8d5e5); color:#9b5e7a; }
+  .tmpl-preview.t4 { background:linear-gradient(135deg,#fafafa,#efefef); color:#555; }
+  .tmpl-preview.t5 { background:linear-gradient(135deg,#1a1a2e,#16213e); color:#4A90D9; }
+
+  .tmpl-name {
+    padding: 10px 12px;
+    background: var(--white);
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--brown);
+    text-transform: uppercase;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+
+  /* ===== PAKET PICKER ===== */
+  .paket-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .paket-card {
+    border: 2px solid rgba(201,168,76,0.15);
+    padding: 20px 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s;
+    position: relative;
+    background: var(--white);
+  }
+  .paket-card:hover { border-color: rgba(201,168,76,0.4); }
+  .paket-card.selected {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+  }
+  .paket-card.featured { position:relative; }
+  .paket-card.featured::before {
+    content:'Terpopuler';
+    position:absolute;
+    top:-1px; left:50%; transform:translateX(-50%);
+    background: var(--gold);
+    font-family:'Cinzel',serif;
+    font-size:7px;
+    letter-spacing:2px;
+    color:var(--dark);
+    padding:3px 10px;
+    white-space:nowrap;
+  }
+
+  .paket-name {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold-d);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .paket-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--brown);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .paket-price small {
+    font-size: 13px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+  }
+
+  .paket-features {
+    list-style: none;
+    text-align: left;
+  }
+  .paket-features li {
+    font-size: 11px;
+    color: var(--brown-l);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.07);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+  .paket-features li::before { content:'✦'; color:var(--gold); font-size:7px; flex-shrink:0; margin-top:3px; }
+
+  /* ===== PRIORITAS TOGGLE ===== */
+  .prioritas-opts {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .prio-opt {
+    flex:1; min-width:130px;
+    padding: 12px 14px;
+    border: 1px solid rgba(201,168,76,0.15);
+    cursor: pointer;
+    transition: all 0.25s;
+    background: var(--white);
+    text-align: center;
+  }
+  .prio-opt:hover { border-color: rgba(201,168,76,0.4); }
+  .prio-opt.selected { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+
+  .prio-lbl {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--brown);
+    text-transform: uppercase;
+  }
+  .prio-sub {
+    font-size: 10px;
+    color: var(--brown-l);
+    margin-top: 3px;
+    font-weight: 300;
+  }
+  .prio-price {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    color: var(--gold-d);
+    margin-top: 4px;
+  }
+
+  /* ===== REVIEW SECTION ===== */
+  .review-section {
+    background: var(--white);
+    border: 1px solid rgba(201,168,76,0.15);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .review-section-head {
+    background: var(--cream-d);
+    padding: 12px 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold-d);
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 16px 20px;
+    gap: 12px;
+  }
+
+  .review-item {}
+  .review-key {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--brown-l);
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 3px;
+  }
+  .review-val {
+    font-size: 13px;
+    color: var(--brown);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .price-summary {
+    background: var(--dark);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .price-summary::before {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  }
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .price-row.total {
+    border-bottom: none;
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 12px;
+    margin-top: 4px;
+    font-size: 16px;
+    color: var(--gold-l);
+    font-weight: 700;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .price-row .pval {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    color: var(--cream);
+  }
+  .price-row.total .pval {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--gold);
+  }
+
+  /* ===== AGREEMENT ===== */
+  .agreement {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    background: var(--cream-d);
+    border: 1px solid rgba(201,168,76,0.15);
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .check-box {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(201,168,76,0.3);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: all 0.2s;
+    background: var(--white);
+  }
+  .check-box.checked {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--dark);
+    font-size: 12px;
+  }
+
+  .agreement-text {
+    font-size: 12px;
+    color: var(--brown-l);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .agreement-text strong { color: var(--brown); font-weight: 400; }
+
+  /* ===== NAVIGATION BUTTONS ===== */
+  .form-nav {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .btn-prev {
+    padding: 13px 28px;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--brown-l);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-prev:hover { border-color: var(--gold); color: var(--brown); }
+
+  .btn-next {
+    flex: 1;
+    padding: 14px 28px;
+    background: var(--dark);
+    border: 1px solid var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold-l);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-next:hover { background: var(--gold); color: var(--dark); }
+
+  .btn-submit {
+    flex: 1;
+    padding: 16px;
+    background: var(--gold);
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--dark);
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.25s;
+  }
+  .btn-submit:hover { background: var(--gold-l); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.3); }
+
+  /* ===== SUCCESS PAGE ===== */
+  #success-page {
+    display: none;
+    text-align: center;
+    padding: 60px 20px 80px;
+    max-width: 520px;
+    margin: 0 auto;
+    animation: slideIn 0.5s ease;
+  }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 24px;
+    box-shadow: 0 0 0 12px rgba(201,168,76,0.1);
+  }
+
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 300;
+    color: var(--brown);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .success-title em { color: var(--gold-d); }
+
+  .success-sub {
+    font-size: 14px;
+    color: var(--brown-l);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 28px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .success-card {
+    background: var(--white);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 24px;
+    text-align: left;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .success-card::before {
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  }
+
+  .success-order-id {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold-d);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .success-order-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-style: italic;
+    color: var(--brown);
+  }
+
+  .success-detail {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .sd-key {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--brown-l);
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 3px;
+  }
+  .sd-val {
+    font-size: 13px;
+    color: var(--brown);
+    font-weight: 400;
+  }
+
+  .btn-wa-confirm {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: #25D366;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    margin-bottom: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-wa-confirm:hover { background: #1fb855; }
+
+  .btn-order-again {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 1px solid rgba(201,168,76,0.3);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--brown-l);
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: transparent;
+    width: 100%;
+    text-align: center;
+  }
+  .btn-order-again:hover { border-color: var(--gold); color: var(--brown); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark);
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+  .footer-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .footer-tag {
+    font-size: 10px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 2px;
+    font-weight: 300;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:560px){
+    .form-row { grid-template-columns:1fr; }
+    .form-row.three { grid-template-columns:1fr; }
+    .paket-grid { grid-template-columns:1fr; }
+    .template-grid { grid-template-columns:1fr 1fr; }
+    .review-grid { grid-template-columns:1fr; }
+    .success-detail { grid-template-columns:1fr; }
+    .prioritas-opts { flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <a href="index.html" class="logo">Nirka Studio</a>
+  <div class="header-tag">Form Pemesanan</div>
+</header>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-label">✦ Pesan Undangan Digital ✦</span>
+    <h1 class="hero-title">Buat Undangan<br><em>Impianmu</em></h1>
+    <p class="hero-sub">Isi form di bawah ini dengan lengkap. Tim Nirka Studio akan segera menghubungi kamu untuk konfirmasi pesanan.</p>
+    <div class="hero-divider"><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ===== STEPS BAR ===== -->
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-dot active" id="sdot-1">
+      <div class="step-circle active" id="sc-1">1</div>
+      <div class="step-lbl">Pasangan</div>
+    </div>
+    <div class="step-line" id="sl-1"></div>
+    <div class="step-dot" id="sdot-2">
+      <div class="step-circle" id="sc-2">2</div>
+      <div class="step-lbl">Acara</div>
+    </div>
+    <div class="step-line" id="sl-2"></div>
+    <div class="step-dot" id="sdot-3">
+      <div class="step-circle" id="sc-3">3</div>
+      <div class="step-lbl">Template</div>
+    </div>
+    <div class="step-line" id="sl-3"></div>
+    <div class="step-dot" id="sdot-4">
+      <div class="step-circle" id="sc-4">4</div>
+      <div class="step-lbl">Konfirmasi</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORM ===== -->
+<div class="form-container" id="form-container">
+
+  <!-- ===== STEP 1: DATA PASANGAN ===== -->
+  <div class="step-page active" id="step-1">
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">💑</span> Data Mempelai</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama Mempelai Pria <span class="req">*</span></label>
+          <input type="text" class="form-input" id="pria" placeholder="cth: Muhammad Arjuna">
+          <div class="field-error" id="err-pria">Nama mempelai pria wajib diisi</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Mempelai Wanita <span class="req">*</span></label>
+          <input type="text" class="form-input" id="wanita" placeholder="cth: Salsabila Aulia">
+          <div class="field-error" id="err-wanita">Nama mempelai wanita wajib diisi</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap Pria <span class="req">*</span></label>
+          <input type="text" class="form-input" id="pria-full" placeholder="Nama lengkap sesuai undangan">
+          <div class="field-error" id="err-pria-full">Wajib diisi</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap Wanita <span class="req">*</span></label>
+          <input type="text" class="form-input" id="wanita-full" placeholder="Nama lengkap sesuai undangan">
+          <div class="field-error" id="err-wanita-full">Wajib diisi</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama Ayah Mempelai Pria</label>
+          <input type="text" class="form-input" id="ayah-pria" placeholder="Nama ayah">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Ibu Mempelai Pria</label>
+          <input type="text" class="form-input" id="ibu-pria" placeholder="Nama ibu">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama Ayah Mempelai Wanita</label>
+          <input type="text" class="form-input" id="ayah-wanita" placeholder="Nama ayah">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Ibu Mempelai Wanita</label>
+          <input type="text" class="form-input" id="ibu-wanita" placeholder="Nama ibu">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📱</span> Kontak</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">No. WhatsApp <span class="req">*</span></label>
+          <input type="tel" class="form-input" id="wa" placeholder="08xxxxxxxxxx">
+          <div class="field-error" id="err-wa">Nomor WhatsApp wajib diisi</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instagram (opsional)</label>
+          <input type="text" class="form-input" id="ig" placeholder="@username">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-next" onclick="goStep(2)">Lanjut → Data Acara</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: DATA ACARA ===== -->
+  <div class="step-page" id="step-2">
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">💍</span> Akad Nikah</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tanggal Akad <span class="req">*</span></label>
+          <input type="date" class="form-input" id="tgl-akad">
+          <div class="field-error" id="err-tgl-akad">Tanggal akad wajib diisi</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Jam Akad <span class="req">*</span></label>
+          <input type="time" class="form-input" id="jam-akad">
+          <div class="field-error" id="err-jam-akad">Jam akad wajib diisi</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Lokasi Akad <span class="req">*</span></label>
+        <input type="text" class="form-input" id="lokasi-akad" placeholder="cth: Masjid Al-Falah, Jakarta">
+        <div class="field-error" id="err-lokasi-akad">Lokasi akad wajib diisi</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Alamat Lengkap Lokasi Akad</label>
+        <textarea class="form-textarea" id="alamat-akad" placeholder="Jl. ..." style="min-height:60px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Link Google Maps (opsional)</label>
+        <input type="text" class="form-input" id="maps-akad" placeholder="https://maps.google.com/...">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🎉</span> Resepsi</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tanggal Resepsi</label>
+          <input type="date" class="form-input" id="tgl-resepsi">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Jam Resepsi</label>
+          <input type="time" class="form-input" id="jam-resepsi">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Lokasi Resepsi</label>
+        <input type="text" class="form-input" id="lokasi-resepsi" placeholder="cth: Gedung Serbaguna Pakuan">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Alamat Lengkap Lokasi Resepsi</label>
+        <textarea class="form-textarea" id="alamat-resepsi" placeholder="Jl. ..." style="min-height:60px;"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">✍️</span> Kata-kata & Ayat</div>
+
+      <div class="form-group">
+        <label class="form-label">Ayat / Quote (bisa dikosongkan)</label>
+        <textarea class="form-textarea" id="ayat" placeholder="cth: QS. Ar-Rum : 21 — 'Dan di antara tanda-tanda kebesaran-Nya...'"></textarea>
+        <div class="field-hint">Jika dikosongkan, akan menggunakan ayat default dari template.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Kisah Cinta (opsional)</label>
+        <textarea class="form-textarea" id="story" placeholder="Ceritakan momen spesial kalian — pertemuan pertama, momen lamaran, dll."></textarea>
+        <div class="field-hint">Maksimal 3 momen. Pisahkan dengan enter baru.</div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" onclick="goStep(1)">← Kembali</button>
+      <button class="btn-next" onclick="goStep(3)">Lanjut → Pilih Template</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 3: TEMPLATE & PAKET ===== -->
+  <div class="step-page" id="step-3">
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🎨</span> Pilih Template <span class="req" style="color:var(--red);font-size:10px;">*</span></div>
+
+      <div class="template-grid" id="template-grid">
+        <div class="tmpl-card selected" onclick="selectTemplate(this,'Elegant Gold')">
+          <div class="tmpl-preview t1">Elegant Gold</div>
+          <div class="tmpl-name">Elegant Gold</div>
+        </div>
+        <div class="tmpl-card" onclick="selectTemplate(this,'Nusantara Heritage')">
+          <div class="tmpl-preview t2">Nusantara Heritage</div>
+          <div class="tmpl-name">Nusantara Heritage</div>
+        </div>
+        <div class="tmpl-card" onclick="selectTemplate(this,'Floral Romance')">
+          <div class="tmpl-preview t3">Floral Romance</div>
+          <div class="tmpl-name">Floral Romance</div>
+        </div>
+        <div class="tmpl-card" onclick="selectTemplate(this,'Minimalist Modern')">
+          <div class="tmpl-preview t4">Minimalist Modern</div>
+          <div class="tmpl-name">Minimalist Modern</div>
+        </div>
+        <div class="tmpl-card" onclick="selectTemplate(this,'Bold Contemporary')">
+          <div class="tmpl-preview t5">Bold Contemporary</div>
+          <div class="tmpl-name">Bold Contemporary</div>
+        </div>
+      </div>
+      <div class="field-error" id="err-template" style="margin-top:8px;">Pilih template terlebih dahulu</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📦</span> Pilih Paket <span class="req" style="color:var(--red);font-size:10px;">*</span></div>
+
+      <div class="paket-grid">
+        <div class="paket-card" id="pk-starter" onclick="selectPaket('Starter',149000)">
+          <div class="paket-name">Starter</div>
+          <div class="paket-price"><small>Rp</small>149<small>rb</small></div>
+          <ul class="paket-features">
+            <li>Semua fitur dasar</li>
+            <li>RSVP & ucapan</li>
+            <li>Countdown timer</li>
+            <li>Aktif 3 bulan</li>
+            <li>2x revisi gratis</li>
+          </ul>
+        </div>
+        <div class="paket-card featured selected" id="pk-premium" onclick="selectPaket('Premium',249000)">
+          <div class="paket-name">Premium</div>
+          <div class="paket-price"><small>Rp</small>249<small>rb</small></div>
+          <ul class="paket-features">
+            <li>Semua fitur lengkap</li>
+            <li>Galeri foto</li>
+            <li>Wedding gift</li>
+            <li>Musik background</li>
+            <li>QR Code check-in</li>
+            <li>Aktif 6 bulan</li>
+            <li>3x revisi gratis</li>
+          </ul>
+        </div>
+        <div class="paket-card" id="pk-vip" onclick="selectPaket('VIP',399000)">
+          <div class="paket-name">VIP</div>
+          <div class="paket-price"><small>Rp</small>399<small>rb</small></div>
+          <ul class="paket-features">
+            <li>Custom domain</li>
+            <li>Semua fitur Premium</li>
+            <li>Selesai 6 jam</li>
+            <li>Custom warna & font</li>
+            <li>Video background</li>
+            <li>Aktif 12 bulan</li>
+            <li>Unlimited revisi</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">⚡</span> Prioritas Pengerjaan</div>
+      <div class="prioritas-opts">
+        <div class="prio-opt selected" id="pr-normal" onclick="selectPrioritas('Normal',0)">
+          <div class="prio-lbl">Normal</div>
+          <div class="prio-sub">2 hari kerja</div>
+          <div class="prio-price">Gratis</div>
+        </div>
+        <div class="prio-opt" id="pr-prioritas" onclick="selectPrioritas('Prioritas',50000)">
+          <div class="prio-lbl">Prioritas</div>
+          <div class="prio-sub">1 hari kerja</div>
+          <div class="prio-price">+Rp50.000</div>
+        </div>
+        <div class="prio-opt" id="pr-vip" onclick="selectPrioritas('VIP 6 Jam',100000)">
+          <div class="prio-lbl">VIP 6 Jam</div>
+          <div class="prio-sub">Selesai 6 jam</div>
+          <div class="prio-price">+Rp100.000</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📝</span> Catatan Tambahan</div>
+      <div class="form-group">
+        <label class="form-label">Permintaan Khusus (opsional)</label>
+        <textarea class="form-textarea" id="catatan" placeholder="cth: Minta warna dominan biru navy, ada foto prewedding, dll."></textarea>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" onclick="goStep(2)">← Kembali</button>
+      <button class="btn-next" onclick="goStep(4)">Lanjut → Review Pesanan</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 4: REVIEW & SUBMIT ===== -->
+  <div class="step-page" id="step-4">
+
+    <div class="review-section">
+      <div class="review-section-head">💑 Data Mempelai</div>
+      <div class="review-grid">
+        <div class="review-item">
+          <div class="review-key">Mempelai Pria</div>
+          <div class="review-val" id="rv-pria">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Mempelai Wanita</div>
+          <div class="review-val" id="rv-wanita">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">WhatsApp</div>
+          <div class="review-val" id="rv-wa">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Instagram</div>
+          <div class="review-val" id="rv-ig">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <div class="review-section-head">📅 Data Acara</div>
+      <div class="review-grid">
+        <div class="review-item">
+          <div class="review-key">Tanggal Akad</div>
+          <div class="review-val" id="rv-tglakad">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Jam Akad</div>
+          <div class="review-val" id="rv-jamakad">—</div>
+        </div>
+        <div class="review-item" style="grid-column:span 2;">
+          <div class="review-key">Lokasi Akad</div>
+          <div class="review-val" id="rv-lokasi">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Tanggal Resepsi</div>
+          <div class="review-val" id="rv-tglresepsi">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Lokasi Resepsi</div>
+          <div class="review-val" id="rv-lokasiresepsi">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <div class="review-section-head">🎨 Template & Paket</div>
+      <div class="review-grid">
+        <div class="review-item">
+          <div class="review-key">Template</div>
+          <div class="review-val" id="rv-template">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Paket</div>
+          <div class="review-val" id="rv-paket">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Prioritas</div>
+          <div class="review-val" id="rv-prioritas">—</div>
+        </div>
+        <div class="review-item">
+          <div class="review-key">Catatan</div>
+          <div class="review-val" id="rv-catatan">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price summary -->
+    <div class="price-summary">
+      <div class="price-row">
+        <span id="ps-paket-lbl">Paket Premium</span>
+        <span class="pval" id="ps-paket-val">Rp249.000</span>
+      </div>
+      <div class="price-row" id="ps-prio-row" style="display:none;">
+        <span id="ps-prio-lbl">Prioritas Normal</span>
+        <span class="pval" id="ps-prio-val">Gratis</span>
+      </div>
+      <div class="price-row total">
+        <span>Total</span>
+        <span class="pval" id="ps-total">Rp249.000</span>
+      </div>
+    </div>
+
+    <!-- Agreement -->
+    <div class="agreement" onclick="toggleAgree()">
+      <div class="check-box" id="agree-box"></div>
+      <div class="agreement-text">
+        Saya telah membaca dan menyetujui <strong>syarat & ketentuan</strong> Nirka Studio, termasuk kebijakan revisi, masa aktif undangan, dan ketentuan pembayaran.
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" onclick="goStep(3)">← Kembali</button>
+      <button class="btn-submit" onclick="submitOrder()">✦ Kirim Pesanan ✦</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== SUCCESS PAGE ===== -->
+<div id="success-page">
+  <div class="success-icon">✦</div>
+  <h2 class="success-title">Pesanan <em>Diterima!</em></h2>
+  <p class="success-sub">Terima kasih telah mempercayakan undangan pernikahan kamu kepada Nirka Studio 🤍<br>Tim kami akan menghubungi kamu dalam <strong>1×24 jam</strong> untuk konfirmasi.</p>
+
+  <div class="success-card">
+    <div class="success-order-id">Nomor Pesanan</div>
+    <div class="success-order-num" id="sc-order-id">—</div>
+    <div class="success-detail">
+      <div>
+        <div class="sd-key">Nama Pasangan</div>
+        <div class="sd-val" id="sc-nama">—</div>
+      </div>
+      <div>
+        <div class="sd-key">Paket</div>
+        <div class="sd-val" id="sc-paket">—</div>
+      </div>
+      <div>
+        <div class="sd-key">Template</div>
+        <div class="sd-val" id="sc-template">—</div>
+      </div>
+      <div>
+        <div class="sd-key">Total</div>
+        <div class="sd-val" id="sc-total">—</div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#" id="btn-wa-confirm" class="btn-wa-confirm" target="_blank">
+    💬 Konfirmasi via WhatsApp
+  </a>
+  <button class="btn-order-again" onclick="resetForm()">← Kembali ke Form</button>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-brand">Nirka Studio</div>
+  <div class="footer-tag">Digital Wedding Invitation · Indonesia</div>
+</footer>
+
+<script>
+  // ===== STATE =====
+  let currentStep = 1;
+  let selectedTemplate = 'Elegant Gold';
+  let selectedPaket    = 'Premium';
+  let selectedPaketHarga = 249000;
+  let selectedPrioritas  = 'Normal';
+  let selectedPrioritasHarga = 0;
+  let agreed = false;
+
+  const HARGA = { Starter:149000, Premium:249000, VIP:399000 };
+
+  function fmtRp(n) {
+    return 'Rp' + n.toLocaleString('id-ID');
+  }
+
+  function fmtDate(str) {
+    if (!str) return '—';
+    return new Date(str).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  }
+
+  // ===== STEP NAVIGATION =====
+  function goStep(n) {
+    if (n > currentStep && !validateStep(currentStep)) return;
+
+    // Update step circles
+    for (let i=1; i<=4; i++) {
+      const sc = document.getElementById('sc-'+i);
+      const sd = document.getElementById('sdot-'+i);
+      sc.classList.remove('active','done');
+      sd.classList.remove('active');
+      if (i < n)       { sc.classList.add('done'); sc.textContent='✓'; }
+      else if (i === n){ sc.classList.add('active'); sc.textContent=i; sd.classList.add('active'); }
+      else             { sc.textContent=i; }
+    }
+    // Update step lines
+    for (let i=1; i<=3; i++) {
+      document.getElementById('sl-'+i).classList.toggle('done', i < n);
+    }
+
+    // Switch pages
+    document.querySelectorAll('.step-page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('step-'+n).classList.add('active');
+
+    // If going to step 4, populate review
+    if (n === 4) populateReview();
+
+    currentStep = n;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // ===== VALIDATION =====
+  function validateStep(n) {
+    let ok = true;
+
+    function check(id, errId) {
+      const val = document.getElementById(id).value.trim();
+      const err = document.getElementById(errId);
+      if (!val) {
+        document.getElementById(id).classList.add('error');
+        err.classList.add('show');
+        ok = false;
+      } else {
+        document.getElementById(id).classList.remove('error');
+        err.classList.remove('show');
+      }
+    }
+
+    if (n === 1) {
+      check('pria','err-pria');
+      check('wanita','err-wanita');
+      check('pria-full','err-pria-full');
+      check('wanita-full','err-wanita-full');
+      check('wa','err-wa');
+    }
+
+    if (n === 2) {
+      check('tgl-akad','err-tgl-akad');
+      check('jam-akad','err-jam-akad');
+      check('lokasi-akad','err-lokasi-akad');
+    }
+
+    if (n === 3) {
+      if (!selectedTemplate) {
+        document.getElementById('err-template').classList.add('show');
+        ok = false;
+      } else {
+        document.getElementById('err-template').classList.remove('show');
+      }
+    }
+
+    if (!ok) {
+      // Scroll to first error
+      const firstErr = document.querySelector('.form-input.error, .form-select.error');
+      if (firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    return ok;
+  }
+
+  // ===== TEMPLATE SELECTION =====
+  function selectTemplate(el, name) {
+    document.querySelectorAll('.tmpl-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTemplate = name;
+    document.getElementById('err-template').classList.remove('show');
+  }
+
+  // ===== PAKET SELECTION =====
+  function selectPaket(name, harga) {
+    selectedPaket = name;
+    selectedPaketHarga = harga;
+    ['starter','premium','vip'].forEach(p => document.getElementById('pk-'+p).classList.remove('selected'));
+    document.getElementById('pk-'+name.toLowerCase()).classList.add('selected');
+    updatePriceRow();
+  }
+
+  // ===== PRIORITAS SELECTION =====
+  function selectPrioritas(name, harga) {
+    selectedPrioritas = name;
+    selectedPrioritasHarga = harga;
+    ['normal','prioritas','vip'].forEach(p => document.getElementById('pr-'+p).classList.remove('selected'));
+    const key = name === 'Normal' ? 'normal' : name === 'Prioritas' ? 'prioritas' : 'vip';
+    document.getElementById('pr-'+key).classList.add('selected');
+    updatePriceRow();
+  }
+
+  function updatePriceRow() {
+    // Update price summary if on step 4
+    const ps = document.getElementById('ps-paket-val');
+    if (ps) {
+      document.getElementById('ps-paket-lbl').textContent = 'Paket ' + selectedPaket;
+      document.getElementById('ps-paket-val').textContent = fmtRp(selectedPaketHarga);
+      const prioRow = document.getElementById('ps-prio-row');
+      if (selectedPrioritasHarga > 0) {
+        prioRow.style.display = 'flex';
+        document.getElementById('ps-prio-lbl').textContent = selectedPrioritas;
+        document.getElementById('ps-prio-val').textContent = '+' + fmtRp(selectedPrioritasHarga);
+      } else {
+        prioRow.style.display = 'none';
+      }
+      document.getElementById('ps-total').textContent = fmtRp(selectedPaketHarga + selectedPrioritasHarga);
+    }
+  }
+
+  // ===== AGREEMENT =====
+  function toggleAgree() {
+    agreed = !agreed;
+    const box = document.getElementById('agree-box');
+    box.classList.toggle('checked', agreed);
+    box.textContent = agreed ? '✓' : '';
+  }
+
+  // ===== POPULATE REVIEW =====
+  function populateReview() {
+    const g = id => document.getElementById(id).value.trim();
+
+    document.getElementById('rv-pria').textContent     = g('pria-full') || g('pria') || '—';
+    document.getElementById('rv-wanita').textContent   = g('wanita-full') || g('wanita') || '—';
+    document.getElementById('rv-wa').textContent       = g('wa') || '—';
+    document.getElementById('rv-ig').textContent       = g('ig') || '—';
+    document.getElementById('rv-tglakad').textContent  = fmtDate(g('tgl-akad'));
+    document.getElementById('rv-jamakad').textContent  = g('jam-akad') || '—';
+    document.getElementById('rv-lokasi').textContent   = g('lokasi-akad') || '—';
+    document.getElementById('rv-tglresepsi').textContent = fmtDate(g('tgl-resepsi'));
+    document.getElementById('rv-lokasiresepsi').textContent = g('lokasi-resepsi') || '—';
+    document.getElementById('rv-template').textContent = selectedTemplate;
+    document.getElementById('rv-paket').textContent    = selectedPaket + ' — ' + fmtRp(selectedPaketHarga);
+    document.getElementById('rv-prioritas').textContent = selectedPrioritas + (selectedPrioritasHarga > 0 ? ' (+'+fmtRp(selectedPrioritasHarga)+')':'');
+    document.getElementById('rv-catatan').textContent  = g('catatan') || '—';
+
+    // Price summary
+    document.getElementById('ps-paket-lbl').textContent = 'Paket ' + selectedPaket;
+    document.getElementById('ps-paket-val').textContent = fmtRp(selectedPaketHarga);
+    const prioRow = document.getElementById('ps-prio-row');
+    if (selectedPrioritasHarga > 0) {
+      prioRow.style.display = 'flex';
+      document.getElementById('ps-prio-lbl').textContent = selectedPrioritas;
+      document.getElementById('ps-prio-val').textContent = '+' + fmtRp(selectedPrioritasHarga);
+    } else {
+      prioRow.style.display = 'none';
+    }
+    document.getElementById('ps-total').textContent = fmtRp(selectedPaketHarga + selectedPrioritasHarga);
+  }
+
+  // ===== SUBMIT =====
+  function submitOrder() {
+    if (!agreed) {
+      document.getElementById('agree-box').style.boxShadow = '0 0 0 3px rgba(192,57,43,0.3)';
+      setTimeout(()=>document.getElementById('agree-box').style.boxShadow='',2000);
+      alert('Harap centang persetujuan syarat & ketentuan terlebih dahulu.');
+      return;
+    }
+
+    const g = id => document.getElementById(id).value.trim();
+
+    // Generate order ID
+    const now    = new Date();
+    const yr     = now.getFullYear();
+    const mo     = String(now.getMonth()+1).padStart(2,'0');
+    const count  = (parseInt(localStorage.getItem('ns_form_count')||'0') + 1);
+    localStorage.setItem('ns_form_count', count);
+    const orderId = `ORD/${yr}/${mo}/${String(count).padStart(3,'0')}`;
+
+    // Build order object
+    const order = {
+      id:        orderId,
+      pria:      g('pria'),
+      wanita:    g('wanita'),
+      'pria-full':   g('pria-full'),
+      'wanita-full': g('wanita-full'),
+      'ayah-pria':   g('ayah-pria'),
+      'ibu-pria':    g('ibu-pria'),
+      'ayah-wanita': g('ayah-wanita'),
+      'ibu-wanita':  g('ibu-wanita'),
+      wa:        g('wa'),
+      ig:        g('ig'),
+      'tgl-akad':    g('tgl-akad'),
+      'jam-akad':    g('jam-akad'),
+      'lokasi-akad': g('lokasi-akad'),
+      'alamat-akad': g('alamat-akad'),
+      'maps-akad':   g('maps-akad'),
+      'tgl-resepsi': g('tgl-resepsi'),
+      'jam-resepsi': g('jam-resepsi'),
+      'lokasi-resepsi': g('lokasi-resepsi'),
+      'alamat-resepsi': g('alamat-resepsi'),
+      ayat:      g('ayat'),
+      story:     g('story'),
+      template:  selectedTemplate,
+      paket:     selectedPaket,
+      prioritas: selectedPrioritas,
+      total:     selectedPaketHarga + selectedPrioritasHarga,
+      catatan:   g('catatan'),
+      status:    'Baru',
+      bayar:     'Belum',
+      tglpesan:  now.toISOString().split('T')[0],
+      deadline:  new Date(now.getTime() + 2*86400000).toISOString().split('T')[0],
+      tglnikah:  g('tgl-akad'),
+      source:    'form-online',
+    };
+
+    // Save to localStorage (same as admin)
+    const pesanan = JSON.parse(localStorage.getItem('ns_pesanan')||'[]');
+    pesanan.unshift(order);
+    localStorage.setItem('ns_pesanan', JSON.stringify(pesanan));
+
+    // Show success
+    showSuccess(order);
+  }
+
+  // ===== SHOW SUCCESS =====
+  function showSuccess(order) {
+    document.getElementById('form-container').style.display = 'none';
+    const sp = document.getElementById('success-page');
+    sp.style.display = 'block';
+    sp.scrollIntoView({behavior:'smooth'});
+
+    document.getElementById('sc-order-id').textContent  = order.id;
+    document.getElementById('sc-nama').textContent      = `${order.pria} & ${order.wanita}`;
+    document.getElementById('sc-paket').textContent     = order.paket;
+    document.getElementById('sc-template').textContent  = order.template;
+    document.getElementById('sc-total').textContent     = fmtRp(order.total);
+
+    // WA confirmation link
+    const waNum = order.wa.replace(/\D/g,'').replace(/^0/,'62');
+    const msg = encodeURIComponent(
+`Halo kak ${order.pria} & ${order.wanita}! 👋
+
+Terima kasih sudah memesan undangan digital di *Nirka Studio* 🤍
+
+Berikut ringkasan pesanan kamu:
+📋 *${order.id}*
+🎨 Template: *${order.template}*
+📦 Paket: *${order.paket}*
+💰 Total: *${fmtRp(order.total)}*
+
+Tim kami akan segera menghubungi kamu untuk konfirmasi pembayaran dan memulai proses pengerjaan.
+
+Kalau ada pertanyaan, langsung balas chat ini ya! 😊`);
+
+    document.getElementById('btn-wa-confirm').href = `https://wa.me/628XXXXXXXXX?text=${msg}`;
+  }
+
+  // ===== RESET =====
+  function resetForm() {
+    document.getElementById('form-container').style.display = 'block';
+    document.getElementById('success-page').style.display = 'none';
+    document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el=>el.value='');
+    goStep(1);
+    agreed = false;
+    document.getElementById('agree-box').classList.remove('checked');
+    document.getElementById('agree-box').textContent = '';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
